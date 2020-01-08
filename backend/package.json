@@ -10,7 +10,7 @@
     "db:reset": "node ./db/resetdb.js",
     "scss": "./node_modules/node-sass/bin/node-sass --watch ./sass -o ./public/styles"
   },
-  "author": "Lighthouse Labs",
+  "author": "Owen Ripley",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^3.0.6",
@@ -24,9 +24,6 @@
     "fs-extra": "^8.1.0",
     "morgan": "^1.9.1",
     "node-sass-middleware": "^0.11.0",
-    "pdf-image": "^2.0.0",
-    "pg": "^6.4.2",
-    "pg-native": "^3.0.0",
     "socket.io": "^2.3.0"
   },
   "devDependencies": {
