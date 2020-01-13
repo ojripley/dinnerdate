@@ -1,6 +1,6 @@
 INSERT INTO users (username, password)
-VALUES('rips', 'p'),
-('bean', 'p');
+VALUES('rips', '$2b$10$zKUTboOdJIu4dftX3ePDtO3b.YuAgM9VMr8ycqk7plAdWvazUkVTm'),
+('bean', '$2b$10$zKUTboOdJIu4dftX3ePDtO3b.YuAgM9VMr8ycqk7plAdWvazUkVTm');
 
 INSERT INTO meals (name, prep_time, added_by_user)
 VALUES
@@ -35,4 +35,3 @@ VALUES
 (2, 8),
 (2, 9),
 (2, 10);
-

@@ -1,6 +1,6 @@
 const db = require('./poolSetup');
 
-const fetchUsersByUsername = function(username) {
+const fetchUserByUsername = function(username) {
   const vars = [username];
 
   return db.query(`
@@ -65,7 +65,7 @@ const insertMeal = function (name, prepTime, addedBy) {
 };
 
 module.exports = {
-  fetchUsersByUsername,
+  fetchUserByUsername,
   fetchMealById,
   insertUser,
   insertMeal
