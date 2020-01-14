@@ -30,11 +30,13 @@ function encryptCookie(text, iv) {
 }
 
 function decryptCookie(text) {
+  console.log('text', text);
   let iv = Buffer.from(text.iv, 'hex');
   let encryptedText = Buffer.from(text.id, 'hex');
   let decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(key), iv);
   let decrypted = decipher.update(encryptedText);
   decrypted = Buffer.concat([decrypted, decipher.final()]);
+  console.log(decrypted.toString());
   return decrypted.toString();
 }
 
@@ -63,7 +65,10 @@ io.on('connection', (client) => {
   // Checks cookie
   client.on('checkCookie', (cookie) => {
 
+    
     if (cookie) {
+      console.log('performing a cookie check');
+      console.log(cookie);
       let matches = cookie.match(/(?<=sid=)[a-zA-Z0-9]*/);
       if (matches) cookieString = matches[0];
 
@@ -72,11 +77,13 @@ io.on('connection', (client) => {
     }
 
     if (cookieString && ivString) {
+      console.log('uhhh');
       try {
-        let username = decrypt({ encryptedData: cookieString, iv: ivString });
+        let username = decryptCookie({ id: cookieString, iv: ivString });
+        console.log('username', username);
         db.fetchUserByUsername(username)
           .then(res => {
-            const user = { id: res[0].id, username: res[0].username, email: res[0].email }
+            const user = { id: res[0].id, username: res[0].username }
             client.emit('cookieResponse', user);
 
             // no active user tracking yet
