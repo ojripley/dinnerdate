@@ -65,15 +65,20 @@ io.on('connection', (client) => {
   // Checks cookie
   client.on('checkCookie', (cookie) => {
 
+    let cookieString;
     
     if (cookie) {
       console.log('performing a cookie check');
       console.log(cookie);
       let matches = cookie.match(/(?<=sid=)[a-zA-Z0-9]*/);
-      if (matches) cookieString = matches[0];
+      if (matches) {
+        cookieString = matches[0];
+      }
 
       let ivMatch = cookie.match(/(?<=iv=)[a-zA-Z0-9]*/);
-      if (ivMatch) ivString = ivMatch[0];
+      if (ivMatch) {
+        ivString = ivMatch[0];
+      }
     }
 
     if (cookieString && ivString) {
