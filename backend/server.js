@@ -104,7 +104,7 @@ io.on('connection', (client) => {
         client.emit('cookieResponse', null);
       }
     } else {
-      client.emit('cookieResponse', null);
+      client.emit('cookieConfirmed', null);
     }
   });
 
