@@ -92,10 +92,10 @@ io.on('connection', (client) => {
             client.emit('cookieResponse', user);
 
             // no active user tracking yet
-            // activeUsers.addUser(user, client);
-            // client.on('disconnect', () => {
-            //   activeUsers.removeUser(user.id);
-            // });
+            activeUsers.addUser(user, client);
+            client.on('disconnect', () => {
+              activeUsers.removeUser(user.id);
+            });
           })
           .catch(error => {
             handleError(error, client);
@@ -104,7 +104,9 @@ io.on('connection', (client) => {
         client.emit('cookieResponse', null);
       }
     } else {
-      client.emit('cookieConfirmed', null);
+      client.emit('cookieResponse', null);
+
+      db.fet
     }
   });
 
@@ -126,5 +128,10 @@ io.on('connection', (client) => {
 
   client.on('register', data => {
     authenticator.register(data.username, data.password);
+  });
+
+  client.on('chooseMeal', () => {
+    console.log('sending meal');
+    client.emit('randomMeal', {name: 'chicken on a fork'});
   });
 });
