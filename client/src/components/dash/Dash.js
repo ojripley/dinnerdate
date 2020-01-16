@@ -10,10 +10,24 @@ export default function Dash(props) {
 
   }, []);
 
+  const handleChooseMeal = function() {
+    if (props.socketOpen) {
+      props.socket.emit('chooseMeal');
+
+      console.log('meal requested');
+
+      props.socket.on('randomMeal', (data) => {
+        console.log(data);
+        setRandomizedMeal(data.name);
+        props.socket.off('randomMeal');
+      });
+    }
+  }
+
   return (
     <>
-      <Button variant="contained" size="large" color="primary">Choose My Next Meal!</Button>
-      {}
+      <Button variant="contained" size="large" color="primary" onClick={handleChooseMeal}>Choose My Next Meal!</Button>
+      {randomizedMeal && <p>{randomizedMeal}</p> }
     </>
   );
 };
