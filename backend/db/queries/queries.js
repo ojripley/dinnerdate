@@ -16,7 +16,7 @@ const fetchUserByUsername = function(username) {
   });
 };
 
-const fetchMealById = function (id) {
+const fetchMealById = function(id) {
   const vars = [id];
 
   return db.query(`
@@ -31,6 +31,16 @@ const fetchMealById = function (id) {
       console.log(error);
     });
 };
+
+const fetchMealsByUserId = function(userId) {
+  const vars = [userId];
+
+  return db.query(`
+    SELECT * FROM meals
+    JOIN users_meals ON users_meals.meal_id = meals.id
+    WHERE users_meals.user_id = $1;
+  `, vars);
+}
 
 const insertUser = function(username, password) {
   const vars = [username, password]
@@ -48,7 +58,7 @@ const insertUser = function(username, password) {
   });
 };
 
-const insertMeal = function (name, prepTime, addedBy) {
+const insertMeal = function(name, prepTime, addedBy) {
   const vars = [name, prepTime, addedBy]
 
   return db.query(`
@@ -67,6 +77,7 @@ const insertMeal = function (name, prepTime, addedBy) {
 module.exports = {
   fetchUserByUsername,
   fetchMealById,
+  fetchMealsByUserId,
   insertUser,
   insertMeal
 };
