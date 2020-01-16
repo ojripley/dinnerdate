@@ -18,7 +18,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
 const { Authenticator } = require('./authenticator');
+const { ActiveUsers }  = require('./activeUsers');
 const authenticator = new Authenticator();
+const activeUsers = new ActiveUsers();
+
+const selectMeal = require('./functions/selectMeal');
 
 const key = process.env.ENCRYPTION_KEY; // secret
 
@@ -91,22 +95,21 @@ io.on('connection', (client) => {
             const user = { id: res[0].id, username: res[0].username }
             client.emit('cookieResponse', user);
 
-            // no active user tracking yet
             activeUsers.addUser(user, client);
+            console.log('user added', activeUsers);
             client.on('disconnect', () => {
               activeUsers.removeUser(user.id);
             });
+            activeUsers.addUsersMeals(user, db);
           })
           .catch(error => {
-            handleError(error, client);
+            console.log(error);
           });
       } catch (error) {
         client.emit('cookieResponse', null);
       }
     } else {
       client.emit('cookieResponse', null);
-
-      db.fet
     }
   });
 
@@ -114,14 +117,20 @@ io.on('connection', (client) => {
     authenticator.authenticate(data.username, data.password)
       .then(res => {
         if (res.id) {
+
           const iv = crypto.randomBytes(16);
           const encryptedCookie = encryptCookie(res.username, iv);
+
+          activeUsers.addUser(res, client);
+          client.on('disconnect', () => {
+            activeUsers.removeUser(user.id);
+          });
+          activeUsers.addUsersMeals(res, db);
+
           client.emit('loginResponse', {
             user: res,
             sessionCookie: encryptedCookie
           });
-          console.log(encryptedCookie);
-          console.log(res);
         }
       });
   });
@@ -130,8 +139,15 @@ io.on('connection', (client) => {
     authenticator.register(data.username, data.password);
   });
 
-  client.on('chooseMeal', () => {
-    console.log('sending meal');
-    client.emit('randomMeal', {name: 'chicken on a fork'});
+  client.on('chooseMeal', (data) => {
+    console.log(activeUsers);
+    const selectedMeal = selectMeal(activeUsers[data.user.id].meals);
+    const date = new Date();
+    console.log(date);
+    db.updateUsersMealsLastEaten(data.user.id, selectedMeal.id, date)
+      .then(() => {
+        activeUsers.addUsersMeals(data.user, db);
+      });
+    client.emit('randomMeal', {meal: selectedMeal});
   });
 });

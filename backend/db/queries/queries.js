@@ -36,11 +36,18 @@ const fetchMealsByUserId = function(userId) {
   const vars = [userId];
 
   return db.query(`
-    SELECT * FROM meals
+    SELECT meals.id, meals.name, meals.prep_time, users_meals.last_eaten, users_meals.rating FROM meals
     JOIN users_meals ON users_meals.meal_id = meals.id
-    WHERE users_meals.user_id = $1;
-  `, vars);
-}
+    WHERE users_meals.user_id = $1
+    ORDER BY users_meals.last_eaten;
+  `, vars)
+    .then(res => {
+      return res.rows;
+    })
+    .catch(error => {
+      console.log(error);
+    });
+};
 
 const insertUser = function(username, password) {
   const vars = [username, password]
@@ -74,10 +81,28 @@ const insertMeal = function(name, prepTime, addedBy) {
     });
 };
 
+const updateUsersMealsLastEaten = function(userId, mealId, date) {
+  vars = [userId, mealId, date];
+
+  return db.query(`
+    UPDATE users_meals
+    SET last_eaten = $3
+    WHERE user_id = $1
+    AND meal_id = $2;
+  `, vars)
+    .then(() => {
+      return;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
 module.exports = {
   fetchUserByUsername,
   fetchMealById,
   fetchMealsByUserId,
   insertUser,
-  insertMeal
+  insertMeal,
+  updateUsersMealsLastEaten
 };
