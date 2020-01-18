@@ -1,5 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import Button from '@material-ui/core/Button';
+
+import Button from '../Button';
+
+import '../styles/Dash.scss';
 
 export default function Dash(props) {
 
@@ -24,12 +27,22 @@ export default function Dash(props) {
         props.socket.off('randomMeal');
       });
     }
-  }
+  };
+
+  const confirmMeal = function() {
+    if (props.socketOpen) {
+      console.log('confirming', randomizedMeal);
+      props.socket.emit('confirmMeal', {user: props.user, meal: randomizedMeal});
+    }
+  };
 
   return (
-    <>
-      <Button variant="contained" size="large" color="primary" onClick={handleChooseMeal}>{randomizedMeal ? 'Pick A Different Dish' : 'Choose My Next Meal!'}</Button>
-      {randomizedMeal && <p>Tonight you get to dine onnnnnnn.... {randomizedMeal.name}!</p> }
-    </>
+    <div className={'dash'}>
+      <p id={'meal-message'} className={'text'}>{randomizedMeal ? 'Tonight you get to dine onnnnnnn.... ' : 'Use the button to pick a meal!' }{randomizedMeal ? randomizedMeal.name : ''}</p>
+      <div id={'meal-selection-buttons'}>
+        <Button onClick={handleChooseMeal} class={randomizedMeal ? 'button--random-meal-again' : 'button--random-meal'} text={randomizedMeal ? 'Try Another' : 'Choose My Next Meal!'}></Button>
+        {randomizedMeal && <Button onClick={confirmMeal} class={'button--meal-confirm'} text={'Confirm'}></Button>}
+      </div>
+    </div>
   );
 };

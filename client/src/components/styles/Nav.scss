@@ -1,0 +1,37 @@
+@import './theme.scss';
+
+#nav {
+  width: 100vw;
+  height: 4em;
+  background-color: $c-2;
+  position: fixed;
+  display: flex;
+  flex-direction: row-reverse;
+
+  #menu-icon {
+    display: inline-block;
+    cursor: pointer;
+    position: fixed;
+    margin-right: 12px;
+
+    .menu-icon-bar {
+      width: 40px;
+      height: 2px;
+      background-color: white;
+      margin-top: 10px;
+      transition: 0.4s;
+      border-bottom-left-radius: 2px;
+    }
+
+    .menu-close .bar1 {
+      transform: rotate(-45deg) translate(-9px, 6px);
+      -webkit-transform: rotate(-45deg) translate(-9px, 6px);
+
+    }
+
+    .menu-close .bar3 {
+      -webkit-transform: rotate(45deg) translate(-8px, -8px) ;
+      transform: rotate(45deg) translate(-8px, -8px) ;
+    }
+  }
+}

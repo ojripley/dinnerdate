@@ -86,7 +86,6 @@ io.on('connection', (client) => {
     }
 
     if (cookieString && ivString) {
-      console.log('uhhh');
       try {
         let username = decryptCookie({ id: cookieString, iv: ivString });
         console.log('username', username);
@@ -96,7 +95,6 @@ io.on('connection', (client) => {
             client.emit('cookieResponse', user);
 
             activeUsers.addUser(user, client);
-            console.log('user added', activeUsers);
             client.on('disconnect', () => {
               activeUsers.removeUser(user.id);
             });
@@ -140,14 +138,16 @@ io.on('connection', (client) => {
   });
 
   client.on('chooseMeal', (data) => {
-    console.log(activeUsers);
     const selectedMeal = selectMeal(activeUsers[data.user.id].meals);
+    client.emit('randomMeal', {meal: selectedMeal});
+  });
+  
+  client.on('confirmMeal', data => {
     const date = new Date();
-    console.log(date);
-    db.updateUsersMealsLastEaten(data.user.id, selectedMeal.id, date)
+    db.insertPlannedMeal(data.user.id, data.meal.id, 'dinner', date);
+    db.updateUsersMealsLastEaten(data.user.id, data.meal.id, date)
       .then(() => {
         activeUsers.addUsersMeals(data.user, db);
       });
-    client.emit('randomMeal', {meal: selectedMeal});
   });
 });

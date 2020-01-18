@@ -6,18 +6,18 @@ import { useSocket } from './hooks/useSocket';
 
 // components
 import Login from './components/login/Login';
+import Nav from './components/nav/Nav';
 import Dash from './components/dash/Dash';
 import Loading from './components/Loading';
 
 // styling
-import './App.css'; 
+import './components/styles/App.scss'; 
 
 export default function App() {
   
   // global modes
   const DASH = 'DASH';
   const PROFILE = 'PROFILE';
-  const RECIPES = 'RECIPES';
 
   // states
   const { socket, socketOpen } = useSocket();
@@ -59,11 +59,14 @@ export default function App() {
   }, [socket, socketOpen, user, mode]);
   
   return (
-    <>
+    <div id={'app'}>
       { loading ? <Loading /> 
       : !user ? <Login setUser={setUser} socket={socket} socketOpen={socketOpen} loginError={loginError} setLoginError={setLoginError} />
-      : <Dash user={user} socket={socket} socketOpen={socketOpen}/>
+      : <>
+        <Nav></Nav>
+        <Dash user={user} socket={socket} socketOpen={socketOpen}/>
+      </>
       }
-    </>
+    </div>
   );
 }

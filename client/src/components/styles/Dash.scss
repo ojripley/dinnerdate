@@ -1,0 +1,64 @@
+.dash {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 4em;
+
+  #meal-selection-buttons {
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  button {
+    box-shadow: 2px 3px 3px 3px #060607;
+    border-radius: 3px;
+    border: none;
+  }
+
+  button:active {
+    background-color: goldenrod;
+  }
+
+  button::-moz-focus-inner {
+    border: 0;
+  }
+  
+  .button--random-meal {
+    background-color: #c19757;
+    height: 4em;
+    width: 100%;
+  }
+  
+  .button--random-meal-again {
+    background-color: #c19757;
+    height: 4em;
+    width: 45%;
+    transition-property: width;
+    transition-duration: 0.1s;
+    transition-timing-function: linear;
+  }
+  
+  .button--meal-confirm {
+    background-color: transparent;
+    border-style: solid;
+    border-width: medium;
+    border-color: white;
+    color: white;
+    height: 4em;
+    width: 45%;
+    transition: display;
+    transition-delay: 2s;
+  }
+
+  @media screen and (min-width: 768px) {
+    #meal-selection-buttons {
+        width: 30%;
+    }
+    button:hover{
+      background-color: darkgoldenrod;
+      color:white;
+      cursor: pointer;
+    }
+  }
+}

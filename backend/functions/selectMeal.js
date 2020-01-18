@@ -6,7 +6,6 @@ const selectMeal = function(meals) {
   
   const randomIndex = Math.floor(Math.random() * pastMealThreshold);
 
-
   return meals[randomIndex];
 }
 
