@@ -8,11 +8,11 @@
   display: flex;
   flex-direction: row-reverse;
 
-  #menu-icon {
+  .menu-icon {
     display: inline-block;
     cursor: pointer;
     position: fixed;
-    margin-right: 12px;
+    padding-right: 12px;
 
     .menu-icon-bar {
       width: 40px;
@@ -23,15 +23,28 @@
       border-bottom-left-radius: 2px;
     }
 
-    .menu-close .bar1 {
-      transform: rotate(-45deg) translate(-9px, 6px);
-      -webkit-transform: rotate(-45deg) translate(-9px, 6px);
 
+  }
+  
+  .menu-open {
+    #bar1 {
+      transform: rotate(135deg) translate(-9px, 6px);
+      -webkit-transform: rotate(135deg) translate(10px, -14px);
     }
 
-    .menu-close .bar3 {
-      -webkit-transform: rotate(45deg) translate(-8px, -8px) ;
-      transform: rotate(45deg) translate(-8px, -8px) ;
+    #bar2 {
+      transform: rotate(90deg) translate(-10px, 0px) ;
+      -webkit-transform: rotate(90deg) translate(6px, 18px);
+    }
+    
+    #bar3 {
+      transform: rotate(45deg) translate(-2px, 2px) ;
+      -webkit-transform: rotate(45deg) translate(-4px, -6px);
+    }
+
+    #bar4 {
+      transform: rotate(90deg) translate(10px, 2px);
+      -webkit-transform: rotate(90deg) translate(-18px, -22px);
     }
   }
 }
