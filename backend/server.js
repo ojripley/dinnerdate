@@ -121,7 +121,7 @@ io.on('connection', (client) => {
 
           activeUsers.addUser(res, client);
           client.on('disconnect', () => {
-            activeUsers.removeUser(user.id);
+            activeUsers.removeUser(res.id);
           });
           activeUsers.addUsersMeals(res, db);
 
