@@ -5,9 +5,9 @@ import React, {useState, useEffect } from 'react';
 import { useSocket } from './hooks/useSocket';
 
 // components
-import Login from './components/login/Login';
-import Nav from './components/nav/Nav';
-import Dash from './components/dash/Dash';
+import Login from './components/Login';
+import Nav from './components/Nav';
+import Dash from './components/Dash';
 import Loading from './components/Loading';
 
 // styling

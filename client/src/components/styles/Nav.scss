@@ -17,7 +17,7 @@
     .menu-icon-bar {
       width: 40px;
       height: 2px;
-      background-color: white;
+      background-color: $c-4;
       margin-top: 10px;
       transition: 0.4s;
       border-bottom-left-radius: 2px;
@@ -26,7 +26,7 @@
 
   }
   
-  .menu-open {
+  .menu-icon-open {
     #bar1 {
       transform: rotate(135deg) translate(-9px, 6px);
       -webkit-transform: rotate(135deg) translate(10px, -14px);

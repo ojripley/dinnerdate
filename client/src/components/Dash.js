@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 
 import Button from './Button';
 
-import '../styles/Dash.scss';
+import './styles/Dash.scss';
 
 export default function Dash(props) {
 

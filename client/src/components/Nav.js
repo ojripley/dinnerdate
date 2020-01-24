@@ -1,11 +1,15 @@
 import React, {useState, useEffect} from 'react';
 
-import '../styles/Nav.scss';
+import Menu from './Menu';
+
+import './styles/Nav.scss';
+import './styles/Menu.scss';
 
 export default function Nav(props) {
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [menuIconClasses, setMenuIconClasses] = useState('menu-icon');
+  const [menuClasses, setMenuClasses] = useState('menu');
 
   const toggleMenu = function() {
     setMenuOpen(!menuOpen);
@@ -14,9 +18,11 @@ export default function Nav(props) {
   useEffect(() => {
     if (menuOpen) {
       console.log('changing menu bars');
-      setMenuIconClasses('menu-icon menu-open');
+      setMenuIconClasses('menu-icon menu-icon-open');
+      setMenuClasses('menu menu-open');
     } else {
       setMenuIconClasses('menu-icon');
+      setMenuClasses('menu');
     }
   }, [menuOpen]);
 
@@ -28,6 +34,7 @@ export default function Nav(props) {
         <div className={'menu-icon-bar'} id={'bar3'}></div>
         <div className={'menu-icon-bar'} id={'bar4'}></div>
       </div>
+      <Menu menuClasses={menuClasses} />
     </div>
   );
 };

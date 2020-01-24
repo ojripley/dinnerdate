@@ -1,0 +1,16 @@
+@import './theme.scss';
+
+.menu {
+  height: 91vh;
+  width: 40vw;
+  margin-top: 9vh;
+  margin-right: -40vw;
+  position: fixed;
+  background-color: $c-2;
+  transition: 0.4s;
+}
+
+.menu-open {
+  transform: translate(-40vw, 0);
+  -webkit-transform: translate(-40vw, 0);
+}
