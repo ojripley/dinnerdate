@@ -6,7 +6,8 @@ export const useSocket = () => {
   const [socketOpen, setSocketOpen] = useState(false);
 
   // for local devlopment
-  const ip = 'localhost:8080';
+  // const ip = 'localhost:8080';
+  const ip = '192.168.1.207:8080';
 
   // for deployment
   // const ip = "https://thedrawingboard-backend.herokuapp.com/";

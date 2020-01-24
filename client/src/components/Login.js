@@ -7,7 +7,7 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
-import './Login.scss';
+import './styles/Login.scss';
 
 export default function Login(props) {
 
