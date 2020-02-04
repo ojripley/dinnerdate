@@ -150,4 +150,31 @@ io.on('connection', (client) => {
         activeUsers.addUsersMeals(data.user, db);
       });
   });
+
+  client.on('addMeal', data => {
+    console.log(data);
+    db.fetchMealByName(data.mealName)
+      .then(res => {
+        if (res === null) {
+          db.insertMeal(data.mealName)
+            .then(res => {
+              db.insertUsersMeal(data.user.id, res.id)
+            })
+            .catch(error => {
+              console.log(error);
+            });
+        } else {
+          db.insertUsersMeal(data.user.id, res.id)
+            .then(() => {
+              client.emit('mealAdded');
+            })
+            .catch(error => {
+              console.log(error);
+            });
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  });
 });
