@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from 'react';
 
 import Button from './Button';
+import ScheduledMeal from './ScheduledMeal';
+import MealQuickAdd from './MealQuickAdd';
 
 import './styles/Dash.scss';
-import ScheduledMeal from './ScheduledMeal';
 
 export default function Dash(props) {
 
@@ -41,6 +42,7 @@ export default function Dash(props) {
 
   return (
     <div className={'dash'}>
+      <MealQuickAdd></MealQuickAdd>
       {scheduledMeal ? 
       <ScheduledMeal meal={scheduledMeal}/> :
       <>
@@ -49,7 +51,7 @@ export default function Dash(props) {
           <Button onClick={handleChooseMeal} class={randomizedMeal ? 'button--random-meal-again' : 'button--random-meal'} text={randomizedMeal ? 'Try Another' : 'Choose My Next Meal!'}></Button>
           {randomizedMeal && <Button onClick={confirmMeal} class={'button--meal-confirm'} text={'Confirm'}></Button>}
         </div>
-        </>
+      </>
     }
     </div>
   );
