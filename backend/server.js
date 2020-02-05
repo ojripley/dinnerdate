@@ -155,16 +155,21 @@ io.on('connection', (client) => {
     console.log(data);
     db.fetchMealByName(data.mealName)
       .then(res => {
-        if (res === null) {
+        console.log(res);
+        console.log('wtf');
+        if (res[0] === null) {
+          console.log(res);
           db.insertMeal(data.mealName)
             .then(res => {
-              db.insertUsersMeal(data.user.id, res.id)
+              console.log(res);
+              db.insertUsersMeal(data.user.id, res[0].id)
             })
             .catch(error => {
               console.log(error);
             });
         } else {
-          db.insertUsersMeal(data.user.id, res.id)
+          console.log('fuck off!');
+          db.insertUsersMeal(data.user.id, res[0].id)
             .then(() => {
               client.emit('mealAdded');
             })
