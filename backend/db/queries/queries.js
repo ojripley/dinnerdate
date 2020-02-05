@@ -32,11 +32,27 @@ const fetchMealById = function(id) {
     });
 };
 
+const fetchMealByName = function(name) {
+  const vars = [name];
+
+  return db.query(`
+    SELECT *
+    FROM meals
+    WHERE name ILIKE $1;
+  `, vars)
+    .then(res => {
+      return res.rows;
+    })
+    .catch(error => {
+      console.log(error);
+    });
+};
+
 const fetchMealsByUserId = function(userId) {
   const vars = [userId];
 
   return db.query(`
-    SELECT meals.id, meals.name, meals.prep_time, users_meals.last_eaten, users_meals.rating FROM meals
+    SELECT meals.id, meals.name, users_meals.last_eaten, users_meals.rating FROM meals
     JOIN users_meals ON users_meals.meal_id = meals.id
     WHERE users_meals.user_id = $1
     ORDER BY users_meals.last_eaten;
@@ -65,16 +81,31 @@ const insertUser = function(username, password) {
   });
 };
 
-const insertMeal = function(name, prepTime, addedBy) {
-  const vars = [name, prepTime, addedBy]
+const insertMeal = function(name) {
+  const vars = [name];
 
   return db.query(`
-    INSERT INTO meals (name, prep_time, added_by_user)
-    VALUES ($1, $2, $3)
-    RETURNING name, id, prep_time, added_by_user;
+    INSERT INTO meals (name)
+    VALUES ($1)
+    RETURNING name, id;
   `, vars)
     .then(res => {
       return res.rows;
+    })
+    .catch(error => {
+      console.log(error);
+    });
+};
+
+const insertUsersMeal = function(userId, mealId) {
+  const vars = [userId, mealId];
+
+  return db.query(`
+    INSERT INTO users_meals
+    VALUES ($1, $2);
+  `, vars)
+    .then(() => {
+      return;
     })
     .catch(error => {
       console.log(error);
@@ -89,7 +120,7 @@ const insertPlannedMeal = function(userId, mealId, mealType, date) {
     VALUES ($1, $2, $3, $4);
   `, vars)
     .then(() => {
-      return null;
+      return;
     })
     .catch(error => {
       console.log(error);
@@ -117,8 +148,10 @@ module.exports = {
   fetchUserByUsername,
   fetchMealById,
   fetchMealsByUserId,
+  fetchMealByName,
   insertUser,
   insertMeal,
+  insertUsersMeal,
   insertPlannedMeal,
-  updateUsersMealsLastEaten
+  updateUsersMealsLastEaten,
 };

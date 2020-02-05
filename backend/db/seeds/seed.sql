@@ -2,18 +2,18 @@ INSERT INTO users (username, password)
 VALUES('rips', '$2b$10$zKUTboOdJIu4dftX3ePDtO3b.YuAgM9VMr8ycqk7plAdWvazUkVTm'),
 ('bean', '$2b$10$zKUTboOdJIu4dftX3ePDtO3b.YuAgM9VMr8ycqk7plAdWvazUkVTm');
 
-INSERT INTO meals (name, prep_time, added_by_user)
+INSERT INTO meals (name)
 VALUES
-('salmon', 20, 1),
-('herb crusted tenderloin', 20, 2),
-('seafood enchiladas', 20, 1),
-('seafood pasta', 20, 1),
-('burgers', 20, 1),
-('steak', 20, 1),
-('tilapia', 20, 1),
-('nachos', 20, 1),
-('byron bay bowl', 20, 2),
-('stirfry', 20, 1);
+('salmon'),
+('herb crusted tenderloin'),
+('seafood enchiladas'),
+('seafood pasta'),
+('burgers'),
+('steak'),
+('tilapia'),
+('nachos'),
+('byron bay bowl'),
+('stirfry');
 
 INSERT INTO users_meals (user_id, meal_id)
 VALUES

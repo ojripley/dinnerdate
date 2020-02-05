@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from 'react';
 
 import Button from './Button';
+import ScheduledMeal from './ScheduledMeal';
+import MealQuickAdd from './MealQuickAdd';
 
 import './styles/Dash.scss';
 
@@ -8,6 +10,7 @@ export default function Dash(props) {
 
   const [meals, setMeals] = useState([]);
   const [randomizedMeal, setRandomizedMeal] = useState(null);
+  const [scheduledMeal, setScheduledMeal] = useState(props.scheduledMeal);
 
   useEffect(() => {
 
@@ -32,17 +35,24 @@ export default function Dash(props) {
   const confirmMeal = function() {
     if (props.socketOpen) {
       console.log('confirming', randomizedMeal);
+      setScheduledMeal(randomizedMeal);
       props.socket.emit('confirmMeal', {user: props.user, meal: randomizedMeal});
     }
   };
 
   return (
     <div className={'dash'}>
-      <p id={'meal-message'} className={'text'}>{randomizedMeal ? 'Tonight you get to dine onnnnnnn.... ' : 'Use the button to pick a meal!' }{randomizedMeal ? randomizedMeal.name : ''}</p>
-      <div id={'meal-selection-buttons'}>
-        <Button onClick={handleChooseMeal} class={randomizedMeal ? 'button--random-meal-again' : 'button--random-meal'} text={randomizedMeal ? 'Try Another' : 'Choose My Next Meal!'}></Button>
-        {randomizedMeal && <Button onClick={confirmMeal} class={'button--meal-confirm'} text={'Confirm'}></Button>}
-      </div>
+      <MealQuickAdd socket={props.socket} socketOpen={props.socketOpen} user={props.user}></MealQuickAdd>
+      {scheduledMeal ? 
+      <ScheduledMeal meal={scheduledMeal}/> :
+      <>
+        <p id={'meal-message'} className={'text'}>{randomizedMeal ? 'Tonight you get to dine onnnnnnn.... ' : 'Use the button to pick a meal!' }{randomizedMeal ? randomizedMeal.name : ''}</p>
+        <div id={'meal-selection-buttons'}>
+          <Button onClick={handleChooseMeal} class={randomizedMeal ? 'button--random-meal-again' : 'button--random-meal'} text={randomizedMeal ? 'Try Another' : 'Choose My Next Meal!'}></Button>
+          {randomizedMeal && <Button onClick={confirmMeal} class={'button--meal-confirm'} text={'Confirm'}></Button>}
+        </div>
+      </>
+    }
     </div>
   );
 };

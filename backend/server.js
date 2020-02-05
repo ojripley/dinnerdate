@@ -150,4 +150,36 @@ io.on('connection', (client) => {
         activeUsers.addUsersMeals(data.user, db);
       });
   });
+
+  client.on('addMeal', data => {
+    console.log(data);
+    db.fetchMealByName(data.mealName)
+      .then(res => {
+        console.log(res);
+        console.log('wtf');
+        if (res[0] === null) {
+          console.log(res);
+          db.insertMeal(data.mealName)
+            .then(res => {
+              console.log(res);
+              db.insertUsersMeal(data.user.id, res[0].id)
+            })
+            .catch(error => {
+              console.log(error);
+            });
+        } else {
+          console.log('fuck off!');
+          db.insertUsersMeal(data.user.id, res[0].id)
+            .then(() => {
+              client.emit('mealAdded');
+            })
+            .catch(error => {
+              console.log(error);
+            });
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  });
 });
