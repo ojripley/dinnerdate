@@ -169,7 +169,7 @@ io.on('connection', (client) => {
         } else {
           const mealId = res[0].id;
           console.log(data);
-          db.fetchUsersMealsByIds(data.user.id, mealId)
+          db.fetchUsersMealByIds(data.user.id, mealId)
           .then(res => {
             if(res.length === 0) {
               db.insertUsersMeal(data.user.id, mealId)

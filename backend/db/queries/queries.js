@@ -65,6 +65,23 @@ const fetchMealsByUserId = function(userId) {
     });
 };
 
+const fetchUsersMealByIds = function(userId, mealId) {
+  const vars = [userId, mealId];
+
+  return db.query(`
+    SELECT *
+    FROM users_meals
+    WHERE user_id = $1
+    AND meal_id = $2;
+  `, vars)
+    .then(res => {
+      return res.rows;
+    })
+    .catch(error => {
+      console.log(error);
+    })
+}
+
 const insertUser = function(username, password) {
   const vars = [username, password]
 
@@ -149,6 +166,7 @@ module.exports = {
   fetchMealById,
   fetchMealsByUserId,
   fetchMealByName,
+  fetchUsersMealByIds,
   insertUser,
   insertMeal,
   insertUsersMeal,
