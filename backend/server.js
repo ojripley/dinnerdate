@@ -156,8 +156,7 @@ io.on('connection', (client) => {
     db.fetchMealByName(data.mealName)
       .then(res => {
         console.log(res);
-        console.log('wtf');
-        if (res[0] === null) {
+        if (res.length === 0) {
           console.log(res);
           db.insertMeal(data.mealName)
             .then(res => {
@@ -168,14 +167,25 @@ io.on('connection', (client) => {
               console.log(error);
             });
         } else {
-          console.log('fuck off!');
-          db.insertUsersMeal(data.user.id, res[0].id)
-            .then(() => {
-              client.emit('mealAdded');
-            })
-            .catch(error => {
-              console.log(error);
-            });
+          const mealId = res[0].id;
+          console.log(data);
+          db.fetchUsersMealByIds(data.user.id, mealId)
+          .then(res => {
+            if(res.length === 0) {
+              db.insertUsersMeal(data.user.id, mealId)
+                .then(() => {
+                  client.emit('mealAdded');
+                })
+                .catch(error => {
+                  console.log(error);
+                });
+            } else {
+              console.log('user already owns this meal');
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
         }
       })
       .catch(error => {
