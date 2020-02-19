@@ -66,6 +66,8 @@ io.on('connection', (client) => {
   console.log('new client');
   client.emit('msg', 'successful connection');
 
+
+  // USER LOGS IN
   // Checks cookie
   client.on('checkCookie', (cookie) => {
 
@@ -137,6 +139,14 @@ io.on('connection', (client) => {
     authenticator.register(data.username, data.password);
   });
 
+
+
+
+
+
+
+  // CLIENT SELECTS A RANDOM MEAL
+
   client.on('chooseMeal', (data) => {
     console.log('choosing meal for ', data.user);
     console.log(activeUsers[data.user.id]);
@@ -144,10 +154,11 @@ io.on('connection', (client) => {
     client.emit('randomMeal', {meal: selectedMeal});
   });
   
+
+  // CLIENT CONFIRMS MEAL
   client.on('confirmMeal', data => {
-    const date = new Date();
-    db.insertPlannedMeal(data.user.id, data.meal.id, 'dinner', date);
-    db.updateUsersMealsLastEaten(data.user.id, data.meal.id, date)
+    db.insertPlannedMeal(data.user.id, data.meal.id);
+    db.updateUsersMealsLastEaten(data.user.id, data.meal.id)
       .then(() => {
         activeUsers.addUsersMeals(data.user, db);
       });

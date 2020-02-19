@@ -115,8 +115,31 @@ const insertMeal = function(name) {
     });
 };
 
-const insertPlannedMeal = function(userId, mealId, date) {
-  vars = [userId, mealId, date];
+const insertPlannedMeal = function(userId, mealId) {
+
+  let date = new Date();
+
+  let m = date.getMinutes();
+  let hh = date.getHours();
+  let dd = date.getDate();
+  let mm = date.getMonth() + 1; // Jan is 0!
+  let yyyy = date.getFullYear();
+  if (m < 10) {
+    m = '0' + m;
+  }
+  if (hh < 10) {
+    m = '0' + m;
+  }
+  if (dd < 10) {
+    dd = '0' + dd
+  }
+  if (mm < 10) {
+    mm = '0' + mm
+  }
+
+  const dateString = dd + '-' + mm + '-' + yyyy;
+
+  vars = [userId, mealId, dateString];
 
   return db.query(`
     INSERT INTO planned_meals (user_id, meal_id, date)
@@ -155,7 +178,6 @@ module.exports = {
   fetchUsersMealByIds,
   insertUser,
   insertMeal,
-  insertUsersMeal,
   insertPlannedMeal,
   updateUsersMealsLastEaten,
 };
