@@ -49,15 +49,21 @@ export default function App() {
           console.log('data');
           console.log(data);
           if(data) {
-            setUser(data);
+            setUser(data.user);
             setMode(DASH);
+            setMeals(data.meals);
           }
           console.log('turning off the loading bar');
           setLoading(false);
         });
       }
     }
-  }, [socket, socketOpen, user, mode]);
+  }, [socket, socketOpen, user, mode, meals]);
+
+  useEffect(() => {
+    console.log(user);
+    console.log(meals);
+  }, [meals, user]);
   
   return (
     <div id={'app'}>

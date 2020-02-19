@@ -8,6 +8,7 @@ export default function MealQuickAdd(props) {
   const addMealFieldRef = useRef(null);
 
   const submitMealToAdd = function() {
+    console.log('submitting ', mealToAdd);
     if (mealToAdd.length > 0) {      
       if (props.socket) {
         props.socket.emit('addMeal', {user: props.user, mealName: mealToAdd});

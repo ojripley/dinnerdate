@@ -94,13 +94,21 @@ io.on('connection', (client) => {
         db.fetchUserByUsername(username)
           .then(res => {
             const user = { id: res[0].id, username: res[0].username }
-            client.emit('cookieResponse', user);
+            db.fetchMealsByUserId(user.id)
+              .then(res => {
+                const meals = res;
+                client.emit('cookieResponse', {user: user, meals: meals});
+                activeUsers.addUser(user, client);
+                client.on('disconnect', () => {
+                  activeUsers.removeUser(user.id);
+                });
+                activeUsers.addUsersMeals(user, db);
+              })
+              .catch(error => {
+                console.log(error);
+                client.emit('cookieResponse', null);
+              });
 
-            activeUsers.addUser(user, client);
-            client.on('disconnect', () => {
-              activeUsers.removeUser(user.id);
-            });
-            activeUsers.addUsersMeals(user, db);
           })
           .catch(error => {
             console.log(error);
@@ -169,7 +177,7 @@ io.on('connection', (client) => {
     db.fetchMealByName(data.mealName)
       .then(res => {
         console.log(res);
-        if (res.length === 0) {
+        if (res.length === 0) { // meal doesn't exist yet
           console.log(res);
           db.insertMeal(data.mealName)
             .then(res => {

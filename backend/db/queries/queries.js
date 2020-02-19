@@ -115,6 +115,20 @@ const insertMeal = function(name) {
     });
 };
 
+insertUsersMeal = function (userId, mealId) {
+  const vars = [userId, mealId];
+
+  console.log('inserting user meal', vars);
+
+  return db.query(`
+    INSERT INTO users_meals (user_id, meal_id)
+    VALUES ($1, $2);
+  `, vars)
+    .catch(error => {
+      console.log(error);
+    });
+};
+
 const insertPlannedMeal = function(userId, mealId) {
 
   let date = new Date();
@@ -178,6 +192,7 @@ module.exports = {
   fetchUsersMealByIds,
   insertUser,
   insertMeal,
+  insertUsersMeal,
   insertPlannedMeal,
   updateUsersMealsLastEaten,
 };

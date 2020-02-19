@@ -2,13 +2,11 @@ import React, {useEffect, useState} from 'react';
 
 import Button from './Button';
 import ScheduledMeal from './ScheduledMeal';
-import MealQuickAdd from './MealQuickAdd';
 
 import './styles/Dash.scss';
 
 export default function Dash(props) {
 
-  const [meals, setMeals] = useState([]);
   const [randomizedMeal, setRandomizedMeal] = useState(null);
   const [scheduledMeal, setScheduledMeal] = useState(props.scheduledMeal);
 
