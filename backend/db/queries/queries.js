@@ -32,6 +32,22 @@ const fetchMealById = function(id) {
     });
 };
 
+const fetchMealByName = function(name) {
+  const vars = [name];
+
+  return db.query(`
+    SELECT *
+    FROM meals
+    WHERE name ILIKE $1;
+  `, vars)
+    .then(res => {
+      return res.rows;
+    })
+    .catch(error => {
+      console.log(error);
+    });
+};
+
 const fetchMealsByUserId = function(userId) {
   const vars = [userId];
 
@@ -48,6 +64,23 @@ const fetchMealsByUserId = function(userId) {
       console.log(error);
     });
 };
+
+const fetchUsersMealByIds = function(userId, mealId) {
+  const vars = [userId, mealId];
+
+  return db.query(`
+    SELECT *
+    FROM users_meals
+    WHERE user_id = $1
+    AND meal_id = $2;
+  `, vars)
+    .then(res => {
+      return res.rows;
+    })
+    .catch(error => {
+      console.log(error);
+    })
+}
 
 const insertUser = function(username, password) {
   const vars = [username, password]
@@ -66,7 +99,8 @@ const insertUser = function(username, password) {
 };
 
 const insertMeal = function(name) {
-  const vars = [name]
+  const vars = [name];
+
 
   return db.query(`
     INSERT INTO meals (name)
@@ -89,7 +123,7 @@ const insertPlannedMeal = function(userId, mealId, date) {
     VALUES ($1, $2, $3);
   `, vars)
     .then(() => {
-      return null;
+      return;
     })
     .catch(error => {
       console.log(error);
@@ -117,8 +151,11 @@ module.exports = {
   fetchUserByUsername,
   fetchMealById,
   fetchMealsByUserId,
+  fetchMealByName,
+  fetchUsersMealByIds,
   insertUser,
   insertMeal,
+  insertUsersMeal,
   insertPlannedMeal,
-  updateUsersMealsLastEaten
+  updateUsersMealsLastEaten,
 };

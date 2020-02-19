@@ -152,4 +152,46 @@ io.on('connection', (client) => {
         activeUsers.addUsersMeals(data.user, db);
       });
   });
+
+  client.on('addMeal', data => {
+    console.log(data);
+    db.fetchMealByName(data.mealName)
+      .then(res => {
+        console.log(res);
+        if (res.length === 0) {
+          console.log(res);
+          db.insertMeal(data.mealName)
+            .then(res => {
+              console.log(res);
+              db.insertUsersMeal(data.user.id, res[0].id)
+            })
+            .catch(error => {
+              console.log(error);
+            });
+        } else {
+          const mealId = res[0].id;
+          console.log(data);
+          db.fetchUsersMealByIds(data.user.id, mealId)
+          .then(res => {
+            if(res.length === 0) {
+              db.insertUsersMeal(data.user.id, mealId)
+                .then(() => {
+                  client.emit('mealAdded');
+                })
+                .catch(error => {
+                  console.log(error);
+                });
+            } else {
+              console.log('user already owns this meal');
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  });
 });
