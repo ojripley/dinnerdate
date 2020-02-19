@@ -27,14 +27,17 @@ export default function Nav(props) {
   }, [menuOpen]);
 
   return(
-    <div id={'nav'}>
-      <div className={menuIconClasses} onClick={toggleMenu}>
-        <div className={'menu-icon-bar'} id={'bar1'}></div> 
-        <div className={'menu-icon-bar'} id={'bar2'}></div>
-        <div className={'menu-icon-bar'} id={'bar3'}></div>
-        <div className={'menu-icon-bar'} id={'bar4'}></div>
+    <>
+      <p className={'nav-title'}>Dinner Date</p>
+      <div id={'nav'}>
+        <div className={menuIconClasses} onClick={toggleMenu}>
+          <div className={'menu-icon-bar'} id={'bar1'}></div> 
+          <div className={'menu-icon-bar'} id={'bar2'}></div>
+          <div className={'menu-icon-bar'} id={'bar3'}></div>
+          <div className={'menu-icon-bar'} id={'bar4'}></div>
+        </div>
+        <Menu menuClasses={menuClasses} user={props.user} socket={props.socket} socketOpen={props.socketOpen} meals={props.meals}/>
       </div>
-      <Menu menuClasses={menuClasses} user={props.user} socket={props.socket} socketOpen={props.socketOpen} meals={props.meals}/>
-    </div>
+    </>
   );
 };

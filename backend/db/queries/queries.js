@@ -54,8 +54,7 @@ const fetchMealsByUserId = function(userId) {
   return db.query(`
     SELECT meals.id, meals.name, users_meals.last_eaten, users_meals.rating FROM meals
     JOIN users_meals ON users_meals.meal_id = meals.id
-    WHERE users_meals.user_id = $1
-    ORDER BY users_meals.last_eaten;
+    WHERE users_meals.user_id = $1;
   `, vars)
     .then(res => {
       return res.rows;
@@ -151,7 +150,7 @@ const insertPlannedMeal = function(userId, mealId) {
     mm = '0' + mm
   }
 
-  const dateString = dd + '-' + mm + '-' + yyyy;
+  const dateString = yyyy + '-' + mm + '-' + dd;
 
   vars = [userId, mealId, dateString];
 
