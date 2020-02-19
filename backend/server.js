@@ -66,6 +66,8 @@ io.on('connection', (client) => {
   console.log('new client');
   client.emit('msg', 'successful connection');
 
+
+  // USER LOGS IN
   // Checks cookie
   client.on('checkCookie', (cookie) => {
 
@@ -136,6 +138,14 @@ io.on('connection', (client) => {
   client.on('register', data => {
     authenticator.register(data.username, data.password);
   });
+
+
+
+
+
+
+
+  // CLIENT SELECTS A RANDOM MEAL
 
   client.on('chooseMeal', (data) => {
     console.log('choosing meal for ', data.user);

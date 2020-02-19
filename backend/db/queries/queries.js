@@ -155,7 +155,6 @@ module.exports = {
   fetchUsersMealByIds,
   insertUser,
   insertMeal,
-  insertUsersMeal,
   insertPlannedMeal,
   updateUsersMealsLastEaten,
 };
