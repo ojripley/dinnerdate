@@ -1,25 +1,32 @@
-import React, { useState} from 'react';
+import React, { useState } from 'react';
 
-import Button from'./Button';
+import './styles/MealQuickAdd.scss';
 
 export default function MealQuickAdd(props) {
 
-  const [textAreaValue, setTextAreaValue] = useState('');
+  const [mealToAdd, setMealToAdd] = useState('');
 
-  const addMeal = function() {
-    if(props.socketOpen) {
-      props.socket.emit('addMeal', {mealName: textAreaValue, user: props.user});
+  const submitMealToAdd = function() {
+    console.log('adding...', mealToAdd);
+
+    if (mealToAdd.length > 0) {      
+      if (props.socket) {
+        props.socket.emit('addMeal', {user: props.user, mealName: mealToAdd});
+      }
     }
-  };
+  }
 
-  const handleTextAreaChange = function(value) {
-    setTextAreaValue(value);
+  const handleKeyPress = event => {
+    if (event.charCode === 13) {
+      event.preventDefault();
+      submitMealToAdd();
+    }
   }
 
   return(
-    <div className={'mealQuickAdd'}>
-      <textarea onChange={event => handleTextAreaChange(event.target.value)}></textarea>
-      <Button className={'add-meal-button'} onClick={addMeal} text={'Add Meal'}></Button>
+    <div className={'meal-quick-add'}>
+      <textarea className={'add-meal-field'} onChange={event => setMealToAdd(event.target.value)} onKeyPress={handleKeyPress} placeholder={'Add a new meal!'}></textarea>
+      <button className={'add-meal-button'} onClick={submitMealToAdd} >Add Meal</button>
     </div>
   );
 };

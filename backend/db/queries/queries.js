@@ -101,6 +101,7 @@ const insertUser = function(username, password) {
 const insertMeal = function(name) {
   const vars = [name];
 
+
   return db.query(`
     INSERT INTO meals (name)
     VALUES ($1)
@@ -114,27 +115,12 @@ const insertMeal = function(name) {
     });
 };
 
-const insertUsersMeal = function(userId, mealId) {
-  const vars = [userId, mealId];
+const insertPlannedMeal = function(userId, mealId, date) {
+  vars = [userId, mealId, date];
 
   return db.query(`
-    INSERT INTO users_meals
-    VALUES ($1, $2);
-  `, vars)
-    .then(() => {
-      return;
-    })
-    .catch(error => {
-      console.log(error);
-    });
-};
-
-const insertPlannedMeal = function(userId, mealId, mealType, date) {
-  vars = [userId, mealId, mealType, date];
-
-  return db.query(`
-    INSERT INTO planned_meals (user_id, meal_id, mealType, date)
-    VALUES ($1, $2, $3, $4);
+    INSERT INTO planned_meals (user_id, meal_id, date)
+    VALUES ($1, $2, $3);
   `, vars)
     .then(() => {
       return;

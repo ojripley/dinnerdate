@@ -6,6 +6,7 @@ class ActiveUsers {
   // -- -- -- -- -- -- //
 
   addUser(user, client) {
+    console.log('adding ', user);
     this[user.id] = { id: user.id, username: user.username, socket: client };
   }
 
