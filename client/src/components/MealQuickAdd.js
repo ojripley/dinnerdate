@@ -14,14 +14,14 @@ export default function MealQuickAdd(props) {
         props.socket.emit('addMeal', {user: props.user, mealName: mealToAdd});
       }
     }
-  }
+  };
 
   const handleKeyPress = event => {
     if (event.charCode === 13) {
       event.preventDefault();
       submitMealToAdd();
     }
-  }
+  };
 
   return(
     <div className={'meal-quick-add'}>
