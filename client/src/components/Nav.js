@@ -34,7 +34,7 @@ export default function Nav(props) {
         <div className={'menu-icon-bar'} id={'bar3'}></div>
         <div className={'menu-icon-bar'} id={'bar4'}></div>
       </div>
-      <Menu menuClasses={menuClasses} />
+      <Menu menuClasses={menuClasses} user={props.user} socket={props.socket} socketOpen={props.socketOpen} meals={props.meals}/>
     </div>
   );
 };

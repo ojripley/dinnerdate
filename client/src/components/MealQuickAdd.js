@@ -25,7 +25,7 @@ export default function MealQuickAdd(props) {
 
   return(
     <div className={'meal-quick-add'}>
-      {setMealToAdd && <textarea ref={addMealFieldRef} className={'add-meal-field'} onChange={event => setMealToAdd(event.target.value)} onKeyPress={handleKeyPress} placeholder={'Add a new meal!'}></textarea>}
+      <textarea ref={addMealFieldRef} className={'add-meal-field'} onChange={event => setMealToAdd(event.target.value)} onKeyPress={handleKeyPress} placeholder={'Add a new meal!'}></textarea>
       <button className={'add-meal-button'} onClick={submitMealToAdd}>Add Meal</button>
     </div>
   );

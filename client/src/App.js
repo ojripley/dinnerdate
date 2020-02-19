@@ -23,6 +23,7 @@ export default function App() {
   const { socket, socketOpen } = useSocket();
   const [mode, setMode] = useState(null);
   const [user, setUser] = useState(null);
+  const [meals, setMeals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loginError, setLoginError] = useState(false);
   
@@ -63,7 +64,7 @@ export default function App() {
       { loading ? <Loading /> 
       : !user ? <Login setUser={setUser} socket={socket} socketOpen={socketOpen} loginError={loginError} setLoginError={setLoginError} />
       : <>
-        <Nav></Nav>
+        <Nav user={user} socket={socket} socketOpen={socketOpen} meals={meals}></Nav>
         <Dash user={user} socket={socket} socketOpen={socketOpen}/>
       </>
       }

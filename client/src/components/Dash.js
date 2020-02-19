@@ -42,7 +42,6 @@ export default function Dash(props) {
 
   return (
     <div className={'dash'}>
-      <MealQuickAdd socket={props.socket} socketOpen={props.socketOpen} user={props.user}></MealQuickAdd>
       {scheduledMeal ? 
       <ScheduledMeal meal={scheduledMeal}/> :
       <>
