@@ -138,6 +138,8 @@ io.on('connection', (client) => {
   });
 
   client.on('chooseMeal', (data) => {
+    console.log('choosing meal for ', data.user);
+    console.log(activeUsers[data.user.id]);
     const selectedMeal = selectMeal(activeUsers[data.user.id].meals);
     client.emit('randomMeal', {meal: selectedMeal});
   });

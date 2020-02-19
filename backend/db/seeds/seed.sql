@@ -2,7 +2,7 @@ INSERT INTO users (username, password)
 VALUES('rips', '$2b$10$zKUTboOdJIu4dftX3ePDtO3b.YuAgM9VMr8ycqk7plAdWvazUkVTm'),
 ('bean', '$2b$10$zKUTboOdJIu4dftX3ePDtO3b.YuAgM9VMr8ycqk7plAdWvazUkVTm');
 
-INSERT INTO meals (name, prep_time, added_by_user)
+INSERT INTO meals (name)
 VALUES
 ('salmon', 20, 1),
 ('herb crusted tenderloin', 20, 2),

@@ -16,29 +16,20 @@
     display: flex;
     justify-content: space-between;
   }
-
-  button {
-    box-shadow: 2px 3px 3px 3px #060607;
-    border-radius: 3px;
-    border: none;
-  }
-
-  button:active {
-    background-color: goldenrod;
-  }
-
-  button::-moz-focus-inner {
-    border: 0;
-  }
   
   .button--random-meal {
-    background-color: #c19757;
+    background-color: white;
+    border-style: solid;
+    border-width: 2px;
+    border-color: #c19757;
+    border-radius: 10px;
     height: 4em;
     width: 100%;
   }
   
   .button--random-meal-again {
-    background-color: #c19757;
+    background-color: white;
+    border-radius: 10px;
     height: 4em;
     width: 45%;
     transition-property: width;
@@ -47,11 +38,11 @@
   }
   
   .button--meal-confirm {
-    background-color: transparent;
+    background-color: white;
     border-style: solid;
-    border-width: medium;
-    border-color: white;
-    color: white;
+    border-width: 2px;
+    border-color: #c19757;
+    border-radius: 10px;
     height: 4em;
     width: 45%;
     transition: display;
@@ -60,12 +51,25 @@
 
   @media screen and (min-width: 768px) {
     #meal-selection-buttons {
-        width: 30%;
+        width: 40%;
     }
     button:hover{
-      background-color: darkgoldenrod;
-      color:white;
+      color: #c19757;
       cursor: pointer;
     }
   }
+}
+
+button{
+  box-shadow: inset 0px 0px 3px 2px #b9b9b9;
+  border: none;
+}
+
+button:active {
+  box-shadow: inset 0px 0px 5px 4px #a5a5a5;
+  color: black;
+}
+
+button::-moz-focus-inner {
+  border: 0;
 }
