@@ -67,6 +67,8 @@ export default function Login(props) {
           document.cookie = `sid=${data.sessionCookie.id}`
           document.cookie = `iv=${data.sessionCookie.iv}`;
           props.setUser(data.user);
+          props.setMeals(data.meals);
+          props.setTodaysMeal(data.todaysMeal);
         }
 
         console.log('cookie');

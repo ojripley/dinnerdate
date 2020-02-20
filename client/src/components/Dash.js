@@ -2,15 +2,10 @@ import React, {useEffect, useState} from 'react';
 
 import Button from './Button';
 import ScheduledMeal from './ScheduledMeal';
-import MealQuickAdd from './MealQuickAdd';
 
 import './styles/Dash.scss';
 
 export default function Dash(props) {
-
-  const [meals, setMeals] = useState([]);
-  const [randomizedMeal, setRandomizedMeal] = useState(null);
-  const [scheduledMeal, setScheduledMeal] = useState(props.scheduledMeal);
 
   useEffect(() => {
 
@@ -26,7 +21,7 @@ export default function Dash(props) {
 
       props.socket.on('randomMeal', (data) => {
         console.log(data);
-        setRandomizedMeal(data.meal);
+        props.setRandomizedMeal(data.meal);
         props.socket.off('randomMeal');
       });
     }
@@ -34,22 +29,20 @@ export default function Dash(props) {
 
   const confirmMeal = function() {
     if (props.socketOpen) {
-      console.log('confirming', randomizedMeal);
-      setScheduledMeal(randomizedMeal);
-      props.socket.emit('confirmMeal', {user: props.user, meal: randomizedMeal});
+      console.log('confirming', props.randomizedMeal);
+      props.socket.emit('confirmMeal', {user: props.user, meal: props.randomizedMeal, updated: props.updatedMeal});
     }
   };
 
   return (
     <div className={'dash'}>
-      <MealQuickAdd socket={props.socket} socketOpen={props.socketOpen} user={props.user}></MealQuickAdd>
-      {scheduledMeal ? 
-      <ScheduledMeal meal={scheduledMeal}/> :
+      {props.todaysMeal ? 
+      <ScheduledMeal meal={props.todaysMeal} setRandomizedMeal={props.setRandomizedMeal} randomizedMeal={props.randomizedMeal} todaysMeal={props.todaysMeal} setTodaysMeal={props.setTodaysMeal} setUpdatedMeal={props.setUpdatedMeal} /> :
       <>
-        <p id={'meal-message'} className={'text'}>{randomizedMeal ? 'Tonight you get to dine onnnnnnn.... ' : 'Use the button to pick a meal!' }{randomizedMeal ? randomizedMeal.name : ''}</p>
+        <p id={'meal-message'} className={'text'}>{props.randomizedMeal ? 'Tonight you get to dine onnnnnnn.... ' : 'Use the button to pick a meal!' }{props.randomizedMeal ? props.randomizedMeal.name : ''}</p>
         <div id={'meal-selection-buttons'}>
-          <Button onClick={handleChooseMeal} class={randomizedMeal ? 'button--random-meal-again' : 'button--random-meal'} text={randomizedMeal ? 'Try Another' : 'Choose My Next Meal!'}></Button>
-          {randomizedMeal && <Button onClick={confirmMeal} class={'button--meal-confirm'} text={'Confirm'}></Button>}
+          <Button onClick={handleChooseMeal} class={props.randomizedMeal ? 'button--random-meal-again' : 'button--random-meal'} text={props.randomizedMeal ? 'Try Another' : 'Choose My Next Meal!'}></Button>
+          {props.randomizedMeal && <Button onClick={confirmMeal} class={'button--meal-confirm'} text={'Confirm'}></Button>}
         </div>
       </>
     }

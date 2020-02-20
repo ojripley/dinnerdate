@@ -75,7 +75,6 @@ io.on('connection', (client) => {
     
     if (cookie) {
       console.log('performing a cookie check');
-      console.log(cookie);
       let matches = cookie.match(/(?<=sid=)[a-zA-Z0-9]*/);
       if (matches) {
         cookieString = matches[0];
@@ -94,13 +93,32 @@ io.on('connection', (client) => {
         db.fetchUserByUsername(username)
           .then(res => {
             const user = { id: res[0].id, username: res[0].username }
-            client.emit('cookieResponse', user);
-
-            activeUsers.addUser(user, client);
-            client.on('disconnect', () => {
-              activeUsers.removeUser(user.id);
-            });
-            activeUsers.addUsersMeals(user, db);
+            db.fetchMealsByUserId(user.id)
+              .then(res => {
+                const meals = res;
+                db.fetchTodaysMeal(user.id)
+                  .then((res) => {
+                    let todaysMeal;
+                    if (res[0]) {
+                      todaysMeal = res[0];
+                    } else {
+                      todaysMeal = null;
+                    }
+                    client.emit('cookieResponse', {user: user, meals: meals, todaysMeal: todaysMeal});
+                  })
+                  .catch(error => {
+                    console.log(error);
+                  });
+                activeUsers.addUser(user, client);
+                client.on('disconnect', () => {
+                  activeUsers.removeUser(user.id);
+                });
+                activeUsers.addUsersMeals(user, db);
+              })
+              .catch(error => {
+                console.log(error);
+                client.emit('cookieResponse', null);
+              });
           })
           .catch(error => {
             console.log(error);
@@ -118,19 +136,41 @@ io.on('connection', (client) => {
       .then(res => {
         if (res.id) {
 
-          const iv = crypto.randomBytes(16);
-          const encryptedCookie = encryptCookie(res.username, iv);
+          const user = res
 
-          activeUsers.addUser(res, client);
-          client.on('disconnect', () => {
-            activeUsers.removeUser(res.id);
-          });
-          activeUsers.addUsersMeals(res, db);
+          db.fetchMealsByUserId(user.id)
+            .then(res => {
+              const meals = res;
+              db.fetchTodaysMeal(user.id)
+                .then((res) => {
+                  let todaysMeal;
+                  if (res[0]) {
+                    todaysMeal = res[0];
+                  } else {
+                    todaysMeal = null;
+                  }
 
-          client.emit('loginResponse', {
-            user: res,
-            sessionCookie: encryptedCookie
-          });
+                  const iv = crypto.randomBytes(16);
+                  const encryptedCookie = encryptCookie(user.username, iv);
+
+                  client.emit('loginResponse', { 
+                    user: user,
+                    sessionCookie: encryptedCookie,
+                    user: user, 
+                    meals: meals, 
+                    todaysMeal: todaysMeal });
+                })
+                .catch(error => {
+                });
+              activeUsers.addUser(user, client);
+              client.on('disconnect', () => {
+                activeUsers.removeUser(user.id);
+              });
+              activeUsers.addUsersMeals(user, db);
+            })
+            .catch(error => {
+              console.log(error);
+            });
         }
       });
   });
@@ -157,11 +197,32 @@ io.on('connection', (client) => {
 
   // CLIENT CONFIRMS MEAL
   client.on('confirmMeal', data => {
-    db.insertPlannedMeal(data.user.id, data.meal.id);
-    db.updateUsersMealsLastEaten(data.user.id, data.meal.id)
-      .then(() => {
-        activeUsers.addUsersMeals(data.user, db);
-      });
+    if (data.update === false) {
+      db.insertPlannedMeal(data.user.id, data.meal.id)
+        .then(() => {
+          client.emit('setPlannedMeal', data.meal);
+        })
+        .catch(error => {
+          console.log(error);
+        })
+      db.updateUsersMealsLastEaten(data.user.id, data.meal.id)
+        .then(() => {
+          activeUsers.addUsersMeals(data.user, db);
+        });
+    } else {
+      // query to update planned meal
+      db.updatePlannedMeal(data.user.id, data.meal.id)
+        .then(() => {
+          client.emit('setPlannedMeal', data.meal);
+        })
+        .catch(error => {
+          console.log(error);
+        })
+        db.updateUsersMealsLastEaten(data.user.id, data.meal.id)
+        .then(() => {
+          activeUsers.addUsersMeals(data.user, db);
+        });
+    }
   });
 
   client.on('addMeal', data => {
@@ -169,12 +230,23 @@ io.on('connection', (client) => {
     db.fetchMealByName(data.mealName)
       .then(res => {
         console.log(res);
-        if (res.length === 0) {
+        if (res.length === 0) { // meal doesn't exist yet
           console.log(res);
           db.insertMeal(data.mealName)
             .then(res => {
               console.log(res);
               db.insertUsersMeal(data.user.id, res[0].id)
+                .then(() => {
+                  db.fetchMealsByUserId(data.user.id)
+                    .then(res => {
+                      console.log('meal added event');
+                      activeUsers[data.user.id].meals = res;
+                      client.emit('mealAdded', { meals: activeUsers[data.user.id].meals });
+                    })
+                })
+                .catch(error => {
+                  console.log(error);
+                });
             })
             .catch(error => {
               console.log(error);
@@ -187,7 +259,12 @@ io.on('connection', (client) => {
             if(res.length === 0) {
               db.insertUsersMeal(data.user.id, mealId)
                 .then(() => {
-                  client.emit('mealAdded');
+                  db.fetchMealsByUserId(data.user.id)
+                    .then(res => {
+                      console.log('meal added event');
+                      activeUsers[data.user.id].meals = res;
+                      client.emit('mealAdded', { meals: activeUsers[data.user.id].meals });
+                    })
                 })
                 .catch(error => {
                   console.log(error);

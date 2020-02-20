@@ -1,12 +1,24 @@
 @import './theme.scss';
 
+.nav-title{
+  font-size: 20pt;
+  font-style: italic;
+  position: fixed;
+  margin-top: 0.55em;
+  margin-left: 0.55em;
+  color: white;
+  z-index: 2;
+}
+
 #nav {
   width: 100vw;
   height: 4em;
   background-color: #4b4b53;
+  color: whitesmoke;
   position: fixed;
   display: flex;
   flex-direction: row-reverse;
+
 
   .menu-icon {
     display: inline-block;
@@ -22,8 +34,6 @@
       transition: 0.4s;
       border-bottom-left-radius: 2px;
     }
-
-
   }
   
   .menu-icon-open {

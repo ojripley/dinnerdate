@@ -23,8 +23,12 @@ export default function App() {
   const { socket, socketOpen } = useSocket();
   const [mode, setMode] = useState(null);
   const [user, setUser] = useState(null);
+  const [meals, setMeals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loginError, setLoginError] = useState(false);
+  const [randomizedMeal, setRandomizedMeal] = useState(null);
+  const [todaysMeal, setTodaysMeal] = useState(null);
+  const [updatedMeal, setUpdatedMeal] = useState(false);
   
   useEffect(() => {
     if (socketOpen) {
@@ -48,23 +52,47 @@ export default function App() {
           console.log('data');
           console.log(data);
           if(data) {
-            setUser(data);
+            setUser(data.user);
             setMode(DASH);
+            setMeals(data.meals);
+            setTodaysMeal(data.todaysMeal);
           }
           console.log('turning off the loading bar');
           setLoading(false);
         });
       }
     }
-  }, [socket, socketOpen, user, mode]);
+  }, [socket, socketOpen, user, mode, meals]);
+
+  useEffect(() => {
+    if (socketOpen) {
+      socket.on('mealAdded', (data) => {
+        console.log('meal added');
+        setMeals([...data.meals]);
+        socket.off('mealAdded');
+      });
+    }
+
+  }, [socket, socketOpen, meals]);
+
+  useEffect(() => {
+    if (socketOpen) {
+      socket.on('setPlannedMeal', data => {
+        setTodaysMeal(data);
+        console.log('setting planned meal');
+        socket.off('setPlannedMeal');
+      });
+
+    }
+  }, [todaysMeal]);
   
   return (
     <div id={'app'}>
       { loading ? <Loading /> 
-      : !user ? <Login setUser={setUser} socket={socket} socketOpen={socketOpen} loginError={loginError} setLoginError={setLoginError} />
+      : !user ? <Login setUser={setUser} socket={socket} socketOpen={socketOpen} loginError={loginError} setLoginError={setLoginError} setTodaysMeal={setTodaysMeal} setMeals={setMeals} />
       : <>
-        <Nav></Nav>
-        <Dash user={user} socket={socket} socketOpen={socketOpen}/>
+        <Nav user={user} socket={socket} socketOpen={socketOpen} meals={meals}></Nav>
+        <Dash user={user} socket={socket} socketOpen={socketOpen} todaysMeal={todaysMeal} setTodaysMeal={setTodaysMeal} randomizedMeal={randomizedMeal} setRandomizedMeal={setRandomizedMeal} updatedMeal={updatedMeal} setUpdatedMeal={setUpdatedMeal} />
       </>
       }
     </div>
