@@ -76,7 +76,14 @@ export default function App() {
   }, [socket, socketOpen, meals]);
 
   useEffect(() => {
-    console.log(todaysMeal);
+    if (socketOpen) {
+      socket.on('setPlannedMeal', data => {
+        setTodaysMeal(data);
+        console.log('setting planned meal');
+        socket.off('setPlannedMeal');
+      });
+
+    }
   }, [todaysMeal]);
   
   return (
