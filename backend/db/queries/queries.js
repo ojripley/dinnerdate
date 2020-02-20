@@ -79,7 +79,50 @@ const fetchUsersMealByIds = function(userId, mealId) {
     .catch(error => {
       console.log(error);
     })
-}
+};
+
+const fetchTodaysMeal = function(userId) {
+
+  let date = new Date();
+
+  let m = date.getMinutes();
+  let hh = date.getHours();
+  let dd = date.getDate();
+  let mm = date.getMonth() + 1; // Jan is 0!
+  let yyyy = date.getFullYear();
+  if (m < 10) {
+    m = '0' + m;
+  }
+  if (hh < 10) {
+    m = '0' + m;
+  }
+  if (dd < 10) {
+    dd = '0' + dd
+  }
+  if (mm < 10) {
+    mm = '0' + mm
+  }
+
+  const currentDate = yyyy + '-' + mm + '-' + dd;
+
+  console.log('checking for todays meal...', currentDate);
+
+  const vars = [userId, currentDate];
+
+  return db.query(`
+    SELECT date, meals.name FROM planned_meals
+    JOIN meals on meals.id = planned_meals.meal_id
+    WHERE user_id = $1
+    AND planned_meals.date = $2;
+  `, vars)
+    .then((res) => {
+      console.log(res.rows);
+      return res.rows;
+    })
+    .catch(error => {
+      console.log(error);
+    });
+};
 
 const insertUser = function(username, password) {
   const vars = [username, password]
@@ -114,15 +157,19 @@ const insertMeal = function(name) {
     });
 };
 
-insertUsersMeal = function (userId, mealId) {
+const insertUsersMeal = function (userId, mealId) {
   const vars = [userId, mealId];
 
   console.log('inserting user meal', vars);
 
   return db.query(`
     INSERT INTO users_meals (user_id, meal_id)
-    VALUES ($1, $2);
+    VALUES ($1, $2)
+    RETURNING meal_id;
   `, vars)
+    .then((res) => {
+      return res.rows;
+    })
     .catch(error => {
       console.log(error);
     });
@@ -189,6 +236,7 @@ module.exports = {
   fetchMealsByUserId,
   fetchMealByName,
   fetchUsersMealByIds,
+  fetchTodaysMeal,
   insertUser,
   insertMeal,
   insertUsersMeal,

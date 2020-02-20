@@ -26,6 +26,8 @@ export default function App() {
   const [meals, setMeals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loginError, setLoginError] = useState(false);
+  const [randomizedMeal, setRandomizedMeal] = useState(null);
+  const [todaysMeal, setTodaysMeal] = useState(null);
   
   useEffect(() => {
     if (socketOpen) {
@@ -52,6 +54,7 @@ export default function App() {
             setUser(data.user);
             setMode(DASH);
             setMeals(data.meals);
+            setTodaysMeal(data.todaysMeal);
           }
           console.log('turning off the loading bar');
           setLoading(false);
@@ -61,17 +64,27 @@ export default function App() {
   }, [socket, socketOpen, user, mode, meals]);
 
   useEffect(() => {
-    console.log(user);
-    console.log(meals);
-  }, [meals, user]);
+    if (socketOpen) {
+      socket.on('mealAdded', (data) => {
+        console.log('meal added');
+        setMeals([...data.meals]);
+        socket.off('mealAdded');
+      });
+    }
+
+  }, [socket, socketOpen, meals]);
+
+  useEffect(() => {
+    console.log(todaysMeal);
+  }, [todaysMeal]);
   
   return (
     <div id={'app'}>
       { loading ? <Loading /> 
-      : !user ? <Login setUser={setUser} socket={socket} socketOpen={socketOpen} loginError={loginError} setLoginError={setLoginError} />
+      : !user ? <Login setUser={setUser} socket={socket} socketOpen={socketOpen} loginError={loginError} setLoginError={setLoginError} setTodaysMeal={setTodaysMeal} setMeals={setMeals} />
       : <>
         <Nav user={user} socket={socket} socketOpen={socketOpen} meals={meals}></Nav>
-        <Dash user={user} socket={socket} socketOpen={socketOpen}/>
+        <Dash user={user} socket={socket} socketOpen={socketOpen} todaysMeal={todaysMeal} setTodaysMeal={setTodaysMeal} randomizedMeal={randomizedMeal} setRandomizedMeal={setRandomizedMeal} />
       </>
       }
     </div>
