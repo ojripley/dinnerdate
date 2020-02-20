@@ -9,6 +9,7 @@ export default function ScheduledMeal(props) {
   const handleChangeSelectedMeal = function() {
     props.setRandomizedMeal(props.todaysMeal);
     props.setTodaysMeal(null);
+    props.setUpdatedMeal(true);
   }
 
   return(

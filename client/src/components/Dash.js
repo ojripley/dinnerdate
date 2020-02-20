@@ -30,14 +30,14 @@ export default function Dash(props) {
   const confirmMeal = function() {
     if (props.socketOpen) {
       console.log('confirming', props.randomizedMeal);
-      props.socket.emit('confirmMeal', {user: props.user, meal: props.randomizedMeal});
+      props.socket.emit('confirmMeal', {user: props.user, meal: props.randomizedMeal, updated: props.updatedMeal});
     }
   };
 
   return (
     <div className={'dash'}>
       {props.todaysMeal ? 
-      <ScheduledMeal meal={props.todaysMeal} setRandomizedMeal={props.setRandomizedMeal} randomizedMeal={props.randomizedMeal} todaysMeal={props.todaysMeal} setTodaysMeal={props.setTodaysMeal} /> :
+      <ScheduledMeal meal={props.todaysMeal} setRandomizedMeal={props.setRandomizedMeal} randomizedMeal={props.randomizedMeal} todaysMeal={props.todaysMeal} setTodaysMeal={props.setTodaysMeal} setUpdatedMeal={props.setUpdatedMeal} /> :
       <>
         <p id={'meal-message'} className={'text'}>{props.randomizedMeal ? 'Tonight you get to dine onnnnnnn.... ' : 'Use the button to pick a meal!' }{props.randomizedMeal ? props.randomizedMeal.name : ''}</p>
         <div id={'meal-selection-buttons'}>

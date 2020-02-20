@@ -197,9 +197,9 @@ const insertPlannedMeal = function(userId, mealId) {
     mm = '0' + mm
   }
 
-  const dateString = yyyy + '-' + mm + '-' + dd;
+  const currentDate = yyyy + '-' + mm + '-' + dd;
 
-  vars = [userId, mealId, dateString];
+  vars = [userId, mealId, currentDate];
 
   return db.query(`
     INSERT INTO planned_meals (user_id, meal_id, date)
@@ -211,6 +211,46 @@ const insertPlannedMeal = function(userId, mealId) {
     .catch(error => {
       console.log(error);
     })
+};
+
+const updatePlannedMeal = function(userId, mealId) {
+
+  let date = new Date();
+
+  let m = date.getMinutes();
+  let hh = date.getHours();
+  let dd = date.getDate();
+  let mm = date.getMonth() + 1; // Jan is 0!
+  let yyyy = date.getFullYear();
+  if (m < 10) {
+    m = '0' + m;
+  }
+  if (hh < 10) {
+    m = '0' + m;
+  }
+  if (dd < 10) {
+    dd = '0' + dd
+  }
+  if (mm < 10) {
+    mm = '0' + mm
+  }
+
+  const currentDate = yyyy + '-' + mm + '-' + dd;
+
+  const vars = [userId, mealId, currentDate];
+
+  return db.query(`
+    UPDATE planned_meals
+    SET meal_id = $2
+    WHERE user_id = $1
+    AND date = $3;
+  `, vars)
+    .then(() => {
+      return true;
+    })
+    .catch(() => {
+      console.log(error);
+    });
 };
 
 const updateUsersMealsLastEaten = function(userId, mealId, date) {
@@ -241,5 +281,6 @@ module.exports = {
   insertMeal,
   insertUsersMeal,
   insertPlannedMeal,
+  updatePlannedMeal,
   updateUsersMealsLastEaten,
 };

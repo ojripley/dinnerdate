@@ -28,6 +28,7 @@ export default function App() {
   const [loginError, setLoginError] = useState(false);
   const [randomizedMeal, setRandomizedMeal] = useState(null);
   const [todaysMeal, setTodaysMeal] = useState(null);
+  const [updatedMeal, setUpdatedMeal] = useState(false);
   
   useEffect(() => {
     if (socketOpen) {
@@ -84,7 +85,7 @@ export default function App() {
       : !user ? <Login setUser={setUser} socket={socket} socketOpen={socketOpen} loginError={loginError} setLoginError={setLoginError} setTodaysMeal={setTodaysMeal} setMeals={setMeals} />
       : <>
         <Nav user={user} socket={socket} socketOpen={socketOpen} meals={meals}></Nav>
-        <Dash user={user} socket={socket} socketOpen={socketOpen} todaysMeal={todaysMeal} setTodaysMeal={setTodaysMeal} randomizedMeal={randomizedMeal} setRandomizedMeal={setRandomizedMeal} />
+        <Dash user={user} socket={socket} socketOpen={socketOpen} todaysMeal={todaysMeal} setTodaysMeal={setTodaysMeal} randomizedMeal={randomizedMeal} setRandomizedMeal={setRandomizedMeal} updatedMeal={updatedMeal} setUpdatedMeal={setUpdatedMeal} />
       </>
       }
     </div>

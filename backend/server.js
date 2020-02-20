@@ -197,11 +197,20 @@ io.on('connection', (client) => {
 
   // CLIENT CONFIRMS MEAL
   client.on('confirmMeal', data => {
-    db.insertPlannedMeal(data.user.id, data.meal.id);
-    db.updateUsersMealsLastEaten(data.user.id, data.meal.id)
-      .then(() => {
-        activeUsers.addUsersMeals(data.user, db);
-      });
+    if (data.update === false) {
+      db.insertPlannedMeal(data.user.id, data.meal.id);
+      db.updateUsersMealsLastEaten(data.user.id, data.meal.id)
+        .then(() => {
+          activeUsers.addUsersMeals(data.user, db);
+        });
+    } else {
+      // query to update planned meal
+      db.updatePlannedMeal(data.user.id, data.meal.id);
+      db.updateUsersMealsLastEaten(data.user.id, data.meal.id)
+        .then(() => {
+          activeUsers.addUsersMeals(data.user, db);
+        });
+    }
   });
 
   client.on('addMeal', data => {
