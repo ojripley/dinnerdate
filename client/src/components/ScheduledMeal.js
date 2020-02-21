@@ -1,5 +1,7 @@
 import React from 'react';
 
+import './styles/ScheduledMeal.scss';
+
 export default function ScheduledMeal(props) {
 
   console.log(props.meal);

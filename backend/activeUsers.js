@@ -18,7 +18,6 @@ class ActiveUsers {
     db.fetchMealsByUserId(user.id)
       .then(res => {
         this[user.id].meals = res;
-        console.log(this[user.id]);
       })
       .catch(error => {
         console.error(error);

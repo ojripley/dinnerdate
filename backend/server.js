@@ -197,7 +197,9 @@ io.on('connection', (client) => {
 
   // CLIENT CONFIRMS MEAL
   client.on('confirmMeal', data => {
+    console.log('confirming meal', data);
     if (data.update === false) {
+      console.log('new planned meal');
       db.insertPlannedMeal(data.user.id, data.meal.id)
         .then(() => {
           client.emit('setPlannedMeal', data.meal);
@@ -205,14 +207,16 @@ io.on('connection', (client) => {
         .catch(error => {
           console.log(error);
         })
-      db.updateUsersMealsLastEaten(data.user.id, data.meal.id)
+        db.updateUsersMealsLastEaten(data.user.id, data.meal.id)
         .then(() => {
           activeUsers.addUsersMeals(data.user, db);
         });
-    } else {
-      // query to update planned meal
-      db.updatePlannedMeal(data.user.id, data.meal.id)
+      } else {
+        console.log('update planned meal');
+        // query to update planned meal
+        db.updatePlannedMeal(data.user.id, data.meal.id)
         .then(() => {
+          console.log('sending set planned meal');
           client.emit('setPlannedMeal', data.meal);
         })
         .catch(error => {

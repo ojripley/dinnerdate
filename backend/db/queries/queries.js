@@ -246,6 +246,7 @@ const updatePlannedMeal = function(userId, mealId) {
     AND date = $3;
   `, vars)
     .then(() => {
+      console.log('meal updated');
       return true;
     })
     .catch(() => {
