@@ -237,6 +237,8 @@ const updatePlannedMeal = function(userId, mealId) {
 
   const currentDate = yyyy + '-' + mm + '-' + dd;
 
+  console.log(currentDate);
+
   const vars = [userId, mealId, currentDate];
 
   return db.query(`

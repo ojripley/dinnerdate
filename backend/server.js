@@ -198,7 +198,7 @@ io.on('connection', (client) => {
   // CLIENT CONFIRMS MEAL
   client.on('confirmMeal', data => {
     console.log('confirming meal', data);
-    if (data.update === false) {
+    if (data.updated === false) {
       console.log('new planned meal');
       db.insertPlannedMeal(data.user.id, data.meal.id)
         .then(() => {

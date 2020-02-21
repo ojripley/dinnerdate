@@ -7,10 +7,6 @@ import './styles/Dash.scss';
 
 export default function Dash(props) {
 
-  useEffect(() => {
-
-  }, []);
-
   const handleChooseMeal = function() {
     if (props.socketOpen) {
       console.log('i am');
