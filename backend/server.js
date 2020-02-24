@@ -23,6 +23,7 @@ const authenticator = new Authenticator();
 const activeUsers = new ActiveUsers();
 
 const selectMeal = require('./functions/selectMeal');
+const getTodaysDate = require('./functions/getTodaysDate');
 
 const key = process.env.ENCRYPTION_KEY; // secret
 
@@ -190,8 +191,16 @@ io.on('connection', (client) => {
   client.on('chooseMeal', (data) => {
     console.log('choosing meal for ', data.user);
     console.log(activeUsers[data.user.id]);
-    const selectedMeal = selectMeal(activeUsers[data.user.id].meals);
-    client.emit('randomMeal', {meal: selectedMeal});
+
+    db.fetchMealsByUserId(data.user.id)
+      .then(res => {
+        const meals = res;
+        const selectedMeal = selectMeal(meals);
+        client.emit('randomMeal', {meal: selectedMeal});
+      })
+      .catch(error => {
+        console.log(error);
+      });
   });
   
 
@@ -222,10 +231,27 @@ io.on('connection', (client) => {
         .catch(error => {
           console.log(error);
         })
-        db.updateUsersMealsLastEaten(data.user.id, data.meal.id)
+        db.updateUsersMealsLastEaten(data.user.id, data.meal.id, getTodaysDate())
         .then(() => {
-          activeUsers.addUsersMeals(data.user, db);
+          console.log('last eaten should be updated...');
+
+          // revert last_eaten property of changed meal to previous
+          db.fetchPlannedMealByIds(data.user.id, data.meal.id)
+            .then(res => {
+  
+              let previousDate = null;
+  
+              if(res.length > 0) {
+                previousDate = res[0].date;
+              }
+  
+              db.updateUsersMealsLastEaten(data.user.id, data.meal.id, previousDate);
+            });
+        })
+        .catch(error => {
+          console.log(error);
         });
+
     }
   });
 

@@ -124,6 +124,22 @@ const fetchTodaysMeal = function(userId) {
     });
 };
 
+const fetchPlannedMealByIds = function(userId, mealId) {
+  const vars = [userId, mealId];
+
+  return db.query(`
+    SELECT * FROM planned_meals
+    WHERE user_id = $1
+    AND meal_id = $2;
+  `, vars)
+  .then(res => {
+    return res.rows;
+  })
+  .catch(error => {
+    console.log(error);
+  });
+};
+
 const insertUser = function(username, password) {
   const vars = [username, password]
 
@@ -237,18 +253,19 @@ const updatePlannedMeal = function(userId, mealId) {
 
   const currentDate = yyyy + '-' + mm + '-' + dd;
 
-  console.log(currentDate);
 
   const vars = [userId, mealId, currentDate];
+
+  console.log('updating where, ', userId, mealId, currentDate);
 
   return db.query(`
     UPDATE planned_meals
     SET meal_id = $2
     WHERE user_id = $1
-    AND date = $3;
+    AND date LIKE $3;
   `, vars)
     .then(() => {
-      console.log('meal updated');
+      console.log('last_eaten updated');
       return true;
     })
     .catch(() => {
@@ -280,6 +297,7 @@ module.exports = {
   fetchMealByName,
   fetchUsersMealByIds,
   fetchTodaysMeal,
+  fetchPlannedMealByIds,
   insertUser,
   insertMeal,
   insertUsersMeal,

@@ -8,6 +8,18 @@ const selectMeal = function(meals) {
   
   const randomIndex = Math.floor(Math.random() * pastMealThreshold);
 
+  console.log('meals');
+  console.log(meals);
+  console.log('sorted');
+  console.log(sortedMeals);
+
+  ///////////////////////
+
+// TODO : test meal randomization
+//          - need to add last_eaten db updating when a meal is planned
+
+  //////////////////////
+
   return sortedMeals[randomIndex];
 }
 
