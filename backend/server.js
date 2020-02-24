@@ -191,8 +191,16 @@ io.on('connection', (client) => {
   client.on('chooseMeal', (data) => {
     console.log('choosing meal for ', data.user);
     console.log(activeUsers[data.user.id]);
-    const selectedMeal = selectMeal(activeUsers[data.user.id].meals);
-    client.emit('randomMeal', {meal: selectedMeal});
+
+    db.fetchMealsByUserId(data.user.id)
+      .then(res => {
+        const meals = res;
+        const selectedMeal = selectMeal(meals);
+        client.emit('randomMeal', {meal: selectedMeal});
+      })
+      .catch(error => {
+        console.log(error);
+      });
   });
   
 
@@ -226,8 +234,24 @@ io.on('connection', (client) => {
         db.updateUsersMealsLastEaten(data.user.id, data.meal.id, getTodaysDate())
         .then(() => {
           console.log('last eaten should be updated...');
-          activeUsers.addUsersMeals(data.user, db);
+
+          // revert last_eaten property of changed meal to previous
+          db.fetchPlannedMealByIds(data.user.id, data.meal.id)
+            .then(res => {
+  
+              let previousDate = null;
+  
+              if(res.length > 0) {
+                previousDate = res[0].date;
+              }
+  
+              db.updateUsersMealsLastEaten(data.user.id, data.meal.id, previousDate);
+            });
+        })
+        .catch(error => {
+          console.log(error);
         });
+
     }
   });
 
