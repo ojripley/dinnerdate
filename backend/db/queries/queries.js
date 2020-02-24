@@ -237,18 +237,19 @@ const updatePlannedMeal = function(userId, mealId) {
 
   const currentDate = yyyy + '-' + mm + '-' + dd;
 
-  console.log(currentDate);
 
   const vars = [userId, mealId, currentDate];
+
+  console.log('updating where, ', userId, mealId, currentDate);
 
   return db.query(`
     UPDATE planned_meals
     SET meal_id = $2
     WHERE user_id = $1
-    AND date = $3;
+    AND date LIKE $3;
   `, vars)
     .then(() => {
-      console.log('meal updated');
+      console.log('last_eaten updated');
       return true;
     })
     .catch(() => {

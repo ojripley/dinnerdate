@@ -23,6 +23,7 @@ const authenticator = new Authenticator();
 const activeUsers = new ActiveUsers();
 
 const selectMeal = require('./functions/selectMeal');
+const getTodaysDate = require('./functions/getTodaysDate');
 
 const key = process.env.ENCRYPTION_KEY; // secret
 
@@ -222,8 +223,9 @@ io.on('connection', (client) => {
         .catch(error => {
           console.log(error);
         })
-        db.updateUsersMealsLastEaten(data.user.id, data.meal.id)
+        db.updateUsersMealsLastEaten(data.user.id, data.meal.id, getTodaysDate())
         .then(() => {
+          console.log('last eaten should be updated...');
           activeUsers.addUsersMeals(data.user, db);
         });
     }
