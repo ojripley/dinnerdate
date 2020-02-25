@@ -216,7 +216,7 @@ io.on('connection', (client) => {
         .catch(error => {
           console.log(error);
         })
-        db.updateUsersMealsLastEaten(data.user.id, data.meal.id)
+        db.updateUsersMealsLastEaten(data.user.id, data.meal.id, getTodaysDate())
         .then(() => {
           activeUsers.addUsersMeals(data.user, db);
         });
