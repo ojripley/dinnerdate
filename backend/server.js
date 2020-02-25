@@ -105,7 +105,27 @@ io.on('connection', (client) => {
                     } else {
                       todaysMeal = null;
                     }
-                    client.emit('cookieResponse', {user: user, meals: meals, todaysMeal: todaysMeal});
+
+                    db.fetchHistoryByUserId(user.id)
+                      .then(res => {
+
+                        const mealHistory = res;
+
+                        const iv = crypto.randomBytes(16);
+                        const encryptedCookie = encryptCookie(user.username, iv);
+
+                        client.emit('loginResponse', {
+                          user: user,
+                          sessionCookie: encryptedCookie,
+                          user: user,
+                          meals: meals,
+                          todaysMeal: todaysMeal,
+                          mealHistory: mealHistory
+                        });
+                      })
+                      .catch(error => {
+                        console.log(error);
+                      });
                   })
                   .catch(error => {
                     console.log(error);
@@ -151,15 +171,26 @@ io.on('connection', (client) => {
                     todaysMeal = null;
                   }
 
-                  const iv = crypto.randomBytes(16);
-                  const encryptedCookie = encryptCookie(user.username, iv);
+                  db.fetchHistoryByUserId(user.id)
+                    .then(res => {
 
-                  client.emit('loginResponse', { 
-                    user: user,
-                    sessionCookie: encryptedCookie,
-                    user: user, 
-                    meals: meals, 
-                    todaysMeal: todaysMeal });
+                      const mealHistory = res;
+
+                      const iv = crypto.randomBytes(16);
+                      const encryptedCookie = encryptCookie(user.username, iv);
+    
+                      client.emit('loginResponse', { 
+                        user: user,
+                        sessionCookie: encryptedCookie,
+                        user: user, 
+                        meals: meals, 
+                        todaysMeal: todaysMeal,
+                        mealHistory: mealHistory
+                      });
+                    })
+                    .catch(error => {
+                      console.log(error);
+                    });
                 })
                 .catch(error => {
                 });
