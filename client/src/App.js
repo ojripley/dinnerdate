@@ -96,7 +96,7 @@ export default function App() {
       : !user ? <Login setUser={setUser} socket={socket} socketOpen={socketOpen} loginError={loginError} setLoginError={setLoginError} setTodaysMeal={setTodaysMeal} setMeals={setMeals} setMealHistory={setMealHistory} />
       : <>
         <Nav user={user} socket={socket} socketOpen={socketOpen} meals={meals}></Nav>
-        <Dash user={user} socket={socket} socketOpen={socketOpen} todaysMeal={todaysMeal} setTodaysMeal={setTodaysMeal} randomizedMeal={randomizedMeal} setRandomizedMeal={setRandomizedMeal} updatedMeal={updatedMeal} setUpdatedMeal={setUpdatedMeal} />
+        <Dash user={user} socket={socket} socketOpen={socketOpen} todaysMeal={todaysMeal} setTodaysMeal={setTodaysMeal} randomizedMeal={randomizedMeal} setRandomizedMeal={setRandomizedMeal} updatedMeal={updatedMeal} setUpdatedMeal={setUpdatedMeal} meals={meals} mealHistory={mealHistory} />
       </>
       }
     </div>
