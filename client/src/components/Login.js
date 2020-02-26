@@ -61,10 +61,12 @@ export default function Login(props) {
 
   useEffect(() => {
     if (props.socketOpen) {
+      console.log('listening for login response');
       // set cookie and user if login is correct
       props.socket.on('loginResponse', (data) => {
+        console.log('data', data);
         if (data.user && data.user.id) {
-          document.cookie = `sid=${data.sessionCookie.id}`
+          document.cookie = `sid=${data.sessionCookie.id}`;
           document.cookie = `iv=${data.sessionCookie.iv}`;
           props.setUser(data.user);
           props.setMeals(data.meals);

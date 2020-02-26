@@ -88,6 +88,7 @@ io.on('connection', (client) => {
     }
 
     if (cookieString && ivString) {
+      console.log('evalutating cookie');
       try {
         let username = decryptCookie({ id: cookieString, iv: ivString });
         console.log('username', username);
@@ -98,7 +99,7 @@ io.on('connection', (client) => {
               .then(res => {
                 const meals = res;
                 db.fetchTodaysMeal(user.id)
-                  .then((res) => {
+                  .then(res => {
                     let todaysMeal;
                     if (res[0]) {
                       todaysMeal = res[0];
@@ -106,15 +107,19 @@ io.on('connection', (client) => {
                       todaysMeal = null;
                     }
 
+                    console.log('todays meal', todaysMeal);
+
                     db.fetchHistoryByUserId(user.id)
                       .then(res => {
 
                         const mealHistory = res;
 
+                        console.log(mealHistory);
+
                         const iv = crypto.randomBytes(16);
                         const encryptedCookie = encryptCookie(user.username, iv);
 
-                        client.emit('loginResponse', {
+                        client.emit('cookieResponse', {
                           user: user,
                           sessionCookie: encryptedCookie,
                           user: user,

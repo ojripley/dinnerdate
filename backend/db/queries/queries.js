@@ -143,7 +143,7 @@ const fetchPlannedMealByIds = function(userId, mealId) {
 const fetchHistoryByUserId = function(userId) {
   const vars = [userId];
 
-  db.query(`
+  return db.query(`
     SELECT * FROM planned_meals
     WHERE user_id = $1;
   `, vars)
@@ -313,6 +313,7 @@ module.exports = {
   fetchUsersMealByIds,
   fetchTodaysMeal,
   fetchPlannedMealByIds,
+  fetchHistoryByUserId,
   insertUser,
   insertMeal,
   insertUsersMeal,
