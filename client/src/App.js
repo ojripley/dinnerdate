@@ -29,6 +29,7 @@ export default function App() {
   const [randomizedMeal, setRandomizedMeal] = useState(null);
   const [todaysMeal, setTodaysMeal] = useState(null);
   const [updatedMeal, setUpdatedMeal] = useState(false);
+  const [mealHistory, setMealHistory] = useState(null);
   
   useEffect(() => {
     if (socketOpen) {
@@ -56,6 +57,7 @@ export default function App() {
             setMode(DASH);
             setMeals(data.meals);
             setTodaysMeal(data.todaysMeal);
+            setMealHistory(data.mealHistory);
           }
           console.log('turning off the loading bar');
           setLoading(false);
@@ -91,10 +93,10 @@ export default function App() {
   return (
     <div id={'app'}>
       { loading ? <Loading /> 
-      : !user ? <Login setUser={setUser} socket={socket} socketOpen={socketOpen} loginError={loginError} setLoginError={setLoginError} setTodaysMeal={setTodaysMeal} setMeals={setMeals} />
+      : !user ? <Login setUser={setUser} socket={socket} socketOpen={socketOpen} loginError={loginError} setLoginError={setLoginError} setTodaysMeal={setTodaysMeal} setMeals={setMeals} setMealHistory={setMealHistory} />
       : <>
         <Nav user={user} socket={socket} socketOpen={socketOpen} meals={meals}></Nav>
-        <Dash user={user} socket={socket} socketOpen={socketOpen} todaysMeal={todaysMeal} setTodaysMeal={setTodaysMeal} randomizedMeal={randomizedMeal} setRandomizedMeal={setRandomizedMeal} updatedMeal={updatedMeal} setUpdatedMeal={setUpdatedMeal} />
+        <Dash user={user} socket={socket} socketOpen={socketOpen} todaysMeal={todaysMeal} setTodaysMeal={setTodaysMeal} randomizedMeal={randomizedMeal} setRandomizedMeal={setRandomizedMeal} updatedMeal={updatedMeal} setUpdatedMeal={setUpdatedMeal} meals={meals} mealHistory={mealHistory} />
       </>
       }
     </div>

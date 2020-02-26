@@ -6,7 +6,7 @@ export default function ScheduledMeal(props) {
 
   console.log(props.meal);
 
-  const s = `scheduled meal: ${props.meal.name}`;
+  const s = `Todays Meal: ${props.meal.name}`;
 
   const handleChangeSelectedMeal = function() {
     props.setRandomizedMeal(props.todaysMeal);

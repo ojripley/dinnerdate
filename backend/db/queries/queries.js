@@ -140,6 +140,21 @@ const fetchPlannedMealByIds = function(userId, mealId) {
   });
 };
 
+const fetchHistoryByUserId = function(userId) {
+  const vars = [userId];
+
+  return db.query(`
+    SELECT * FROM planned_meals
+    WHERE user_id = $1;
+  `, vars)
+  .then(res => {
+    return res.rows;
+  })
+  .catch(error => {
+    console.log(error);
+  });
+};
+
 const insertUser = function(username, password) {
   const vars = [username, password]
 
@@ -298,6 +313,7 @@ module.exports = {
   fetchUsersMealByIds,
   fetchTodaysMeal,
   fetchPlannedMealByIds,
+  fetchHistoryByUserId,
   insertUser,
   insertMeal,
   insertUsersMeal,

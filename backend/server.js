@@ -88,6 +88,7 @@ io.on('connection', (client) => {
     }
 
     if (cookieString && ivString) {
+      console.log('evalutating cookie');
       try {
         let username = decryptCookie({ id: cookieString, iv: ivString });
         console.log('username', username);
@@ -98,14 +99,38 @@ io.on('connection', (client) => {
               .then(res => {
                 const meals = res;
                 db.fetchTodaysMeal(user.id)
-                  .then((res) => {
+                  .then(res => {
                     let todaysMeal;
                     if (res[0]) {
                       todaysMeal = res[0];
                     } else {
                       todaysMeal = null;
                     }
-                    client.emit('cookieResponse', {user: user, meals: meals, todaysMeal: todaysMeal});
+
+                    console.log('todays meal', todaysMeal);
+
+                    db.fetchHistoryByUserId(user.id)
+                      .then(res => {
+
+                        const mealHistory = res;
+
+                        console.log(mealHistory);
+
+                        const iv = crypto.randomBytes(16);
+                        const encryptedCookie = encryptCookie(user.username, iv);
+
+                        client.emit('cookieResponse', {
+                          user: user,
+                          sessionCookie: encryptedCookie,
+                          user: user,
+                          meals: meals,
+                          todaysMeal: todaysMeal,
+                          mealHistory: mealHistory
+                        });
+                      })
+                      .catch(error => {
+                        console.log(error);
+                      });
                   })
                   .catch(error => {
                     console.log(error);
@@ -151,15 +176,26 @@ io.on('connection', (client) => {
                     todaysMeal = null;
                   }
 
-                  const iv = crypto.randomBytes(16);
-                  const encryptedCookie = encryptCookie(user.username, iv);
+                  db.fetchHistoryByUserId(user.id)
+                    .then(res => {
 
-                  client.emit('loginResponse', { 
-                    user: user,
-                    sessionCookie: encryptedCookie,
-                    user: user, 
-                    meals: meals, 
-                    todaysMeal: todaysMeal });
+                      const mealHistory = res;
+
+                      const iv = crypto.randomBytes(16);
+                      const encryptedCookie = encryptCookie(user.username, iv);
+    
+                      client.emit('loginResponse', { 
+                        user: user,
+                        sessionCookie: encryptedCookie,
+                        user: user, 
+                        meals: meals, 
+                        todaysMeal: todaysMeal,
+                        mealHistory: mealHistory
+                      });
+                    })
+                    .catch(error => {
+                      console.log(error);
+                    });
                 })
                 .catch(error => {
                 });

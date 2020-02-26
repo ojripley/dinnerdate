@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 
 import Button from './Button';
 import ScheduledMeal from './ScheduledMeal';
+import MealHistory from './MealHistory';
 
 import './styles/Dash.scss';
 
@@ -42,6 +43,7 @@ export default function Dash(props) {
         </div>
       </>
     }
+    <MealHistory className={'meal-history'} mealHistory={props.mealHistory} meals={props.meals} ></MealHistory>
     </div>
   );
 };
