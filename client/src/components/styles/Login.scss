@@ -1,5 +1,10 @@
 @import "../../theme/variables";
 
+.login-container{
+  display: flex;
+  justify-content: center;
+}
+
 .container {
   border-radius: 10px;
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
@@ -17,7 +22,6 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
   padding: 0 50px;
   height: 100%;
   text-align: center;
@@ -40,7 +44,7 @@ input.MuiInputBase-input.MuiInput-input.MuiInputBase-inputAdornedEnd {
 }
 
 .form-container {
-  background-color: #36363E;
+  background-color: white;
   position: absolute;
   left: 0;
   width: 100%;

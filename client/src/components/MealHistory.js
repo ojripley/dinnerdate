@@ -24,7 +24,7 @@ export default function MealHistory(props) {
   console.log(historyComponents.length);
   return (
     <>
-      <p>Recent History</p>
+      {historyComponents.length > 0 && <p>Recent History</p> }
       {historyComponents}
     </>
   );
