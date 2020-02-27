@@ -16,7 +16,7 @@ export default function ScheduledMeal(props) {
 
   return(
     <>
-      <p>{s}</p>
+      <p className={'scheduled-meal-message'}>{s}</p>
       <button className={'change-selected-meal-button'} onClick={handleChangeSelectedMeal}>Change This</button>
     </>
   );

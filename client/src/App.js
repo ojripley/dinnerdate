@@ -29,7 +29,7 @@ export default function App() {
   const [randomizedMeal, setRandomizedMeal] = useState(null);
   const [todaysMeal, setTodaysMeal] = useState(null);
   const [updatedMeal, setUpdatedMeal] = useState(false);
-  const [mealHistory, setMealHistory] = useState(null);
+  const [mealHistory, setMealHistory] = useState([]);
   
   useEffect(() => {
     if (socketOpen) {
